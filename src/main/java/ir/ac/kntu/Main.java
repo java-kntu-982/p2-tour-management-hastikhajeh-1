@@ -13,8 +13,11 @@ public class Main {
     static ArrayList<TourLeader> tourLeaders = new ArrayList<>();
     static ArrayList<Tour> tours = new ArrayList<>();
     static HashSet<Area> areas = new HashSet<>();
+    static Date today;
 
     public static void main(String[] args) {
+
+        setToday();
 
 //        printMenu();
 
@@ -25,6 +28,13 @@ public class Main {
         MapUtil.showMap("@29.6257966,52.5563165,17z");
 //        Good for showing two locations
 //        MapUtil.showMap("Tehran","Dubai");
+    }
+
+    private static void setToday() {
+        clearScreen();
+        System.out.println("Enter today");
+        today = new Date(Date.setDate());
+        printMenu();
     }
 
     private static void pause() {
@@ -45,6 +55,7 @@ public class Main {
         System.out.println("2. Tour menu");
         System.out.println("3. Region menu");
         System.out.println("4. Map menu");
+        System.out.println("5. change today's date");
         menu();
     }
 
@@ -60,6 +71,9 @@ public class Main {
             case 3:
                 break;
             case 4:
+                break;
+            case 5:
+                setToday();
                 break;
             default:
                 menu();
@@ -108,7 +122,7 @@ public class Main {
         System.out.println("2. Search with last name");
         System.out.println("3. Search by province");
         System.out.println("4. Search by age");
-        System.out.println("5. Back to main menu");
+        System.out.println("5. Back to menu");
         tourLeaderSearchMenu();
     }
 
@@ -125,21 +139,105 @@ public class Main {
             case 3:
                 break;
             case 4:
+                printSearchByAgeMenu();
                 break;
             case 5:
+                printTourLeaderMenu();
                 break;
             default:
                 tourLeaderSearchMenu();
         }
     }
 
+    private static void printSearchByAgeMenu() {
+        clearScreen();
+        System.out.println("1. search for specific age");
+        System.out.println("2. search for leaders older than given age");
+        System.out.println("3. search for leaders younger than given age");
+        System.out.println("4. search between 2 given ages");
+        System.out.println("5. Go back to menu");
+        searchByAgeMenu();
+    }
+
+    private static void searchByAgeMenu() {
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                searchByGivenAge();
+                break;
+            case 2:
+                searchOlderThan();
+                break;
+            case 3:
+                searchYoungerThan();
+                break;
+            case 4:
+                searchBetween2Ages();
+                break;
+            case 5:
+                printTourLeaderMenu();
+                break;
+            default:
+                searchByAgeMenu();
+        }
+    }
+
+    private static void searchBetween2Ages() {
+        System.out.println("Enter age: ");
+        System.out.print("from: ");
+        int age1 = scanner.nextInt();
+        System.out.print("to: ");
+        int age2 = scanner.nextInt();
+        for (TourLeader tourLeader: TourLeader.searchBetween2Ages(tourLeaders,age1,age2,today)) {
+            System.out.println(tourLeader.toString());
+            System.out.println("-------------");
+        }
+        pause();
+        tourLeaderMenu();
+    }
+
+    private static void searchYoungerThan() {
+        System.out.print("Enter the age: ");
+        int age = scanner.nextInt();
+        for (TourLeader tourLeader: TourLeader.searchYoungerThan(tourLeaders,age,today)) {
+            System.out.println(tourLeader.toString());
+            System.out.println("-------------");
+        }
+        pause();
+        tourLeaderMenu();
+    }
+
+    private static void searchOlderThan() {
+        System.out.print("Enter the age: ");
+        int age = scanner.nextInt();
+        for (TourLeader tourLeader: TourLeader.searchOlderThan(tourLeaders,age,today)) {
+            System.out.println(tourLeader.toString());
+            System.out.println("-------------");
+        }
+        pause();
+        tourLeaderMenu();
+    }
+
+    private static void searchByGivenAge() {
+        System.out.print("Enter the age: ");
+        int age = scanner.nextInt();
+        for (TourLeader tourLeader: TourLeader.searchByAge(tourLeaders,age,today)) {
+            System.out.println(tourLeader.toString());
+            System.out.println("-------------");
+        }
+        pause();
+        tourLeaderMenu();
+    }
+
     private static void searchTourLeaderByLastName() {
         clearScreen();
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
-        for (TourLeader tourLeader: TourLeader.searchByLastName(tourLeaders, lastName)) {
-            System.out.println(tourLeader.toString());
-            System.out.println("------------------");
+        if (TourLeader.searchByLastName(tourLeaders, lastName) == null) {
+            System.out.println("no one found");
+        } else {
+            System.out.println(TourLeader.searchByLastName(tourLeaders, lastName).toString());
         }
         pause();
         tourLeaderMenu();
@@ -151,13 +249,15 @@ public class Main {
         String firstName = scanner.nextLine();
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
-        for (TourLeader tourLeader: TourLeader.searchByName(tourLeaders, firstName, lastName)) {
-            System.out.println(tourLeader.toString());
-            System.out.println("------------------");
+        if (TourLeader.searchByName(tourLeaders, firstName, lastName) == null) {
+            System.out.println("no one found");
+        } else {
+            System.out.println(TourLeader.searchByName(tourLeaders, firstName, lastName).toString());
         }
         pause();
         tourLeaderMenu();
     }
+
     private static void editTourLeader() {
         clearScreen();
         System.out.print("Enter national code: ");

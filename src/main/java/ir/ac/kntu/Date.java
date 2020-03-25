@@ -130,4 +130,8 @@ public class Date {
         return date;
     }
 
+    public int ageCalculator(Date today) {
+        return today.year - year;
+    }
+
 }
