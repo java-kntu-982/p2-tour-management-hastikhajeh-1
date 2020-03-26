@@ -7,9 +7,13 @@ public class Tour {
     private int price;
     private int maxParticipant;
     private int minParticipant;
-    private Area origin;
-    private Area destination;
+    private Area area;
+    private String origin;
+    private String destination;
     private boolean foreign;
     private boolean ByAirplane;
-    private ArrayList<Area> visitingPlaces = new ArrayList<>(duration);
+    private ArrayList<String> PlacesToVisit = new ArrayList<>(duration);
+    private Date start;
+    private Date end;
+    private TourLeader tourLeader;
 }

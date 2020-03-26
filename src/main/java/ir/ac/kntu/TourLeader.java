@@ -11,7 +11,7 @@ public class TourLeader {
     private Date DOB;
     private Date DOE;
     private boolean single;
-    private HashSet<Area> areas;
+    private ArrayList<Area> areas;
     private boolean available = true;
 
     static Scanner scanner = new Scanner(System.in);
@@ -34,7 +34,7 @@ public class TourLeader {
 
         tourLeader.setSingle(getMaritalStatusFromTerminal());
 
-        tourLeader.getAreas().add(getAreaFromTerminal());
+        tourLeader.setAreas(getAreaFromTerminal());
 
         tourLeaders.add(tourLeader);
     }
@@ -76,15 +76,36 @@ public class TourLeader {
         return true;
     }
 
-    public static Area getAreaFromTerminal() {
+    public static ArrayList<Area> getAreaFromTerminal() {
+        ArrayList<Area> areas = new ArrayList<>();
+        System.out.println("Defined areas: ");
+        System.out.println(Area.allNamesToString(Main.areas));
+        System.out.print("How many areas do you want to add? ");
+        int n = scanner.nextInt();
         System.out.println("Enter the area's name: ");
-        String name = scanner.nextLine();
-        for (Area area : Main.areas) {
-            if (area.getName().equals(name)) {
-                return area;
+        String name;
+        boolean flag;
+        scanner.nextLine();
+        for (int i = 0; i < n; i++) {
+            flag = true;
+            name = scanner.nextLine();
+            for (Area area : Main.areas) {
+                if (area.getName().equals(name)) {
+                    areas.add(area);
+                    flag = false;
+                }
+            }
+            if (flag) {
+                System.out.println("you should add this area");
+                Main.pause();
+                Area.addArea(Main.areas);
+                areas.add(Main.areas.get(Main.areas.size()-1));
+                if (i < n-1) {
+                    System.out.println("Enter the area's name: ");
+                }
             }
         }
-        return null;
+        return areas;
     }
 
     public static TourLeader searchByName(ArrayList<TourLeader> tourLeaders, String firstName, String lastName) {
@@ -112,6 +133,19 @@ public class TourLeader {
             }
         }
         return null;
+    }
+
+    public static ArrayList<TourLeader> searchByArea(ArrayList<TourLeader> tourLeaders, String name) {
+        ArrayList<TourLeader> wanted = new ArrayList<>();
+        for (TourLeader tourLeader : tourLeaders) {
+            for (Area area : tourLeader.getAreas()) {
+                if (area.getName().equalsIgnoreCase(name)) {
+                    wanted.add(tourLeader);
+                    break;
+                }
+            }
+        }
+        return wanted;
     }
 
     public static ArrayList<TourLeader> searchByAge(ArrayList<TourLeader> tourLeaders, int age, Date today) {
@@ -155,19 +189,14 @@ public class TourLeader {
     }
 
     public String toString() {
-        String string =  "TourLeader" + "\n" +
+        return  "TourLeader" + "\n" +
                 "firstName: " + firstName + '\n' +
                 "lastName: " + lastName + '\n' +
                 "nationalCode: " + nationalCode + '\n' +
                 "date of birth: " + DOB.toString() + "\n" +
                 "date of employment: " + DOE.toString() + "\n" +
                 "marital status: " + (single ? "single":"married") + "\n" +
-                "areas: ";
-        for (Area area: areas) {
-            string += area.getName();
-            string += " ";
-        }
-        return string;
+                "areas: " + Area.allNamesToString(areas);
     }
 
 
@@ -224,11 +253,11 @@ public class TourLeader {
         this.single = single;
     }
 
-    public HashSet<Area> getAreas() {
+    public ArrayList<Area> getAreas() {
         return areas;
     }
 
-    public void setAreas(HashSet<Area> areas) {
+    public void setAreas(ArrayList<Area> areas) {
         this.areas = areas;
     }
 

@@ -1,7 +1,6 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.maputil.MapUtil;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,21 +10,20 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static ArrayList<TourLeader> tourLeaders = new ArrayList<>();
-    static ArrayList<Tour> tours = new ArrayList<>();
-    static HashSet<Area> areas = new HashSet<>();
+    static ArrayList<Tour> rawTours = new ArrayList<>();
+    static ArrayList<Tour> plannedTours = new ArrayList<>();
+    static ArrayList<Area> areas = new ArrayList<>();
     static Date today;
 
     public static void main(String[] args) {
 
         setToday();
 
-//        printMenu();
-
 //        Good for showing one location
-        MapUtil.showMap("Shiraz");
-        MapUtil.showMap("esfehan");
-        MapUtil.showMap("hafezie");
-        MapUtil.showMap("@29.6257966,52.5563165,17z");
+//        MapUtil.showMap("Shiraz");
+//        MapUtil.showMap("esfehan");
+//        MapUtil.showMap("shiraz hafezie");
+//        MapUtil.showMap("@29.6257966,52.5563165,17z");
 //        Good for showing two locations
 //        MapUtil.showMap("Tehran","Dubai");
     }
@@ -37,7 +35,7 @@ public class Main {
         printMenu();
     }
 
-    private static void pause() {
+    public static void pause() {
         System.out.print("Press Enter");
         Scanner scanner = new Scanner(System.in);
         String pause = scanner.nextLine();
@@ -67,6 +65,7 @@ public class Main {
                 printTourLeaderMenu();
                 break;
             case 2:
+                printTourMenu();
                 break;
             case 3:
                 break;
@@ -80,6 +79,47 @@ public class Main {
         }
 
 
+    }
+
+    private static void printTourMenu() {
+        clearScreen();
+        System.out.println("1. Print all raw tours");
+        System.out.println("2. Print all planned tours");
+        System.out.println("3. Add a raw tour");
+        System.out.println("4. Plan a tour");
+        System.out.println("5. Edit a tour");
+        System.out.println("6. Remove a tour");
+        System.out.println("7. Search for a raw tour");
+        System.out.println("8. Search for a planned tour");
+        System.out.println("9. Back to main menu");
+        tourMenu();
+    }
+
+    private static void tourMenu() {
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            default:
+                tourMenu();
+        }
     }
 
     private static void printTourLeaderMenu() {
@@ -137,6 +177,7 @@ public class Main {
                 searchTourLeaderByLastName();
                 break;
             case 3:
+                searchTourLeaderByArea();
                 break;
             case 4:
                 printSearchByAgeMenu();
@@ -189,50 +230,84 @@ public class Main {
         int age1 = scanner.nextInt();
         System.out.print("to: ");
         int age2 = scanner.nextInt();
-        for (TourLeader tourLeader: TourLeader.searchBetween2Ages(tourLeaders,age1,age2,today)) {
-            System.out.println(tourLeader.toString());
-            System.out.println("-------------");
+        if (TourLeader.searchBetween2Ages(tourLeaders, age1, age2, today).size() == 0) {
+            System.out.println("no one found");
+        } else {
+            for (TourLeader tourLeader : TourLeader.searchBetween2Ages(tourLeaders, age1, age2, today)) {
+                System.out.println(tourLeader.toString());
+                System.out.println("-------------");
+            }
         }
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
     }
 
     private static void searchYoungerThan() {
         System.out.print("Enter the age: ");
         int age = scanner.nextInt();
-        for (TourLeader tourLeader: TourLeader.searchYoungerThan(tourLeaders,age,today)) {
-            System.out.println(tourLeader.toString());
-            System.out.println("-------------");
+        if (TourLeader.searchYoungerThan(tourLeaders, age, today).size() == 0) {
+            System.out.println("no one found");
+        } else {
+            for (TourLeader tourLeader : TourLeader.searchYoungerThan(tourLeaders, age, today)) {
+                System.out.println(tourLeader.toString());
+                System.out.println("-------------");
+            }
         }
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
     }
 
     private static void searchOlderThan() {
         System.out.print("Enter the age: ");
         int age = scanner.nextInt();
-        for (TourLeader tourLeader: TourLeader.searchOlderThan(tourLeaders,age,today)) {
-            System.out.println(tourLeader.toString());
-            System.out.println("-------------");
+        if (TourLeader.searchOlderThan(tourLeaders, age, today).size() == 0) {
+            System.out.println("no one found");
+        } else {
+            for (TourLeader tourLeader : TourLeader.searchOlderThan(tourLeaders, age, today)) {
+                System.out.println(tourLeader.toString());
+                System.out.println("-------------");
+            }
         }
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
     }
 
     private static void searchByGivenAge() {
+        clearScreen();
         System.out.print("Enter the age: ");
         int age = scanner.nextInt();
-        for (TourLeader tourLeader: TourLeader.searchByAge(tourLeaders,age,today)) {
-            System.out.println(tourLeader.toString());
-            System.out.println("-------------");
+        if (TourLeader.searchByAge(tourLeaders, age, today).size() == 0) {
+            System.out.println("no one found");
+        } else {
+            for (TourLeader tourLeader : TourLeader.searchByAge(tourLeaders, age, today)) {
+                System.out.println(tourLeader.toString());
+                System.out.println("-------------");
+            }
         }
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
+    }
+
+    private static void searchTourLeaderByArea() {
+        System.out.print("Enter the areas name: ");
+        scanner.nextLine();
+        String area = scanner.nextLine();
+        if (TourLeader.searchByArea(tourLeaders,area).size() == 0) {
+            System.out.println("no one found");
+        } else {
+            for (TourLeader tourLeader : TourLeader.searchByArea(tourLeaders, area)) {
+                System.out.println(tourLeader.toString());
+                System.out.println("-------------");
+            }
+        }
+        pause();
+        printTourLeaderMenu();
     }
 
     private static void searchTourLeaderByLastName() {
         clearScreen();
         System.out.print("Enter last name: ");
+        scanner.nextLine();
         String lastName = scanner.nextLine();
         if (TourLeader.searchByLastName(tourLeaders, lastName) == null) {
             System.out.println("no one found");
@@ -240,12 +315,13 @@ public class Main {
             System.out.println(TourLeader.searchByLastName(tourLeaders, lastName).toString());
         }
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
     }
 
     private static void searchTourLeaderByName() {
         clearScreen();
         System.out.print("Enter first name: ");
+        scanner.nextLine();
         String firstName = scanner.nextLine();
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
@@ -255,12 +331,13 @@ public class Main {
             System.out.println(TourLeader.searchByName(tourLeaders, firstName, lastName).toString());
         }
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
     }
 
     private static void editTourLeader() {
         clearScreen();
         System.out.print("Enter national code: ");
+        scanner.nextLine();
         String nationalCode = scanner.nextLine();
         TourLeader tourLeader = TourLeader.searchByNationalCode(tourLeaders, nationalCode);
         System.out.println(tourLeader.toString());
@@ -268,7 +345,7 @@ public class Main {
         TourLeader.addTourLeader(tourLeaders);
         System.out.println(tourLeaders.get(tourLeaders.size()-1).toString());
         pause();
-        tourLeaderMenu();
+        printTourLeaderMenu();
     }
 
     private static void addTourLeader() {
