@@ -65,9 +65,10 @@ public class Main {
                 printTourLeaderMenu();
                 break;
             case 2:
-                printTourMenu();
+//                printTourMenu();
                 break;
             case 3:
+                printAreaMenu();
                 break;
             case 4:
                 break;
@@ -81,45 +82,83 @@ public class Main {
 
     }
 
-    private static void printTourMenu() {
+    private static void printAreaMenu() {
         clearScreen();
-        System.out.println("1. Print all raw tours");
-        System.out.println("2. Print all planned tours");
-        System.out.println("3. Add a raw tour");
-        System.out.println("4. Plan a tour");
-        System.out.println("5. Edit a tour");
-        System.out.println("6. Remove a tour");
-        System.out.println("7. Search for a raw tour");
-        System.out.println("8. Search for a planned tour");
-        System.out.println("9. Back to main menu");
-        tourMenu();
+        System.out.println("1. Print all defined areas");
+        System.out.println("2. Add an area");
+        System.out.println("3. Edit an area");
+        System.out.println("4. Remove an area");
+        System.out.println("5. go back to main menu");
+        areaMenu();
     }
 
-    private static void tourMenu() {
+    private static void areaMenu() {
         System.out.print("Enter your choice: ");
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
+                printAllAreas();
                 break;
             case 2:
+                addArea();
                 break;
             case 3:
+                editArea();
                 break;
             case 4:
+                removeArea();
                 break;
             case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
+                printMenu();
                 break;
             default:
-                tourMenu();
+                areaMenu();
         }
+    }
+
+    private static void removeArea() {
+        System.out.print("Enter areas name: ");
+        String name = scanner.nextLine();
+        if (Area.searchByName(areas, name) == null) {
+            System.out.println("no area found");
+        } else {
+            System.out.println(Area.searchByName(areas, name).toString());
+            areas.remove(Area.searchByName(areas, name));
+            System.out.println("area is removed");
+        }
+        pause();
+        printAreaMenu();
+    }
+
+    private static void editArea() {
+        System.out.print("Enter areas name: ");
+        String name = scanner.nextLine();
+        if (Area.searchByName(areas, name) == null) {
+            System.out.println("no area found");
+        } else {
+            System.out.println(Area.searchByName(areas, name).toString());
+            areas.remove(Area.searchByName(areas, name));
+            Area.addArea(areas);
+            System.out.println(areas.get(areas.size()-1).toString());
+        }
+        pause();
+        printAreaMenu();
+    }
+
+    private static void addArea() {
+        Area.addArea(areas);
+        System.out.println(areas.get(areas.size()-1).toString());
+        pause();
+        printAreaMenu();
+    }
+
+    private static void printAllAreas() {
+        for (Area area : areas) {
+            System.out.println(area.toString());
+            System.out.println("---------------------");
+        }
+        pause();
+        printAreaMenu();
     }
 
     private static void printTourLeaderMenu() {

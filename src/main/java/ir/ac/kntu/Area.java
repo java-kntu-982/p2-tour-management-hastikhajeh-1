@@ -45,6 +45,15 @@ public class Area {
         return true;
     }
 
+    public static Area searchByName(ArrayList<Area> areas, String name) {
+        for (Area area : areas) {
+            if (area.getName().equalsIgnoreCase(name)) {
+                return area;
+            }
+        }
+        return null;
+    }
+
     public static String allNamesToString(ArrayList<Area> areas) {
         String string = "";
         for (Area area : areas) {
@@ -57,7 +66,15 @@ public class Area {
     public String toString() {
         return (foreign ? "Foreign":"Domestic") + " Area" + "\n" +
                 "name: " + name + '\n' +
-                "places: " + places.toString() + '\n';
+                "places: " + placesToString() + '\n';
+    }
+
+    public String placesToString() {
+        String string = "";
+        for (String place : places) {
+            string += place + " ";
+        }
+        return string;
     }
 
     public String getName() {
