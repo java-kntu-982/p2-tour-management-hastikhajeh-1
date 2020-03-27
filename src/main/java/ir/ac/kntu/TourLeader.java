@@ -18,10 +18,10 @@ public class TourLeader {
 
     public static void addTourLeader(ArrayList<TourLeader> tourLeaders) {
         TourLeader tourLeader = new TourLeader();
-        System.out.println("Enter first name: ");
+        System.out.println("first name");
         tourLeader.setFirstName(getNameFromTerminal());
 
-        System.out.println("Enter last name: ");
+        System.out.println("last name");
         tourLeader.setLastName(getNameFromTerminal());
 
         tourLeader.setNationalCode(getNationalCodeFromTerminal());

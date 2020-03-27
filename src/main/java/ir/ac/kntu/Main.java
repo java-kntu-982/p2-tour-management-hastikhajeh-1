@@ -65,7 +65,7 @@ public class Main {
                 printTourLeaderMenu();
                 break;
             case 2:
-//                printTourMenu();
+                printTourMenu();
                 break;
             case 3:
                 printAreaMenu();
@@ -78,8 +78,83 @@ public class Main {
             default:
                 menu();
         }
+    }
 
+    private static void printTourMenu() {
+        clearScreen();
+        System.out.println("1. Print all raw tours");
+        System.out.println("2. Print all planned tours");
+        System.out.println("3. Add a raw tour");
+        System.out.println("4. Plan a tour");
+        System.out.println("5. Edit a tour");
+        System.out.println("6. Remove a tour");
+        System.out.println("7. Search for a raw tour");
+        System.out.println("8. Search for a planned tour");
+        System.out.println("9. Back to main menu");
+        tourMenu();
+    }
 
+    private static void tourMenu() {
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                printAllRawTours();
+                break;
+            case 2:
+                printAllPlannedTours();
+                break;
+            case 3:
+                addRawTour();
+                break;
+            case 4:
+                planTour();
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            default:
+                tourMenu();
+        }
+    }
+
+    private static void planTour() {
+        Tour.addPlannedTour(plannedTours);
+        System.out.println(plannedTours.get(plannedTours.size()-1).plannedTourToString());
+        pause();
+        printTourMenu();
+    }
+
+    private static void addRawTour() {
+        Tour.addRawTour(rawTours);
+        System.out.println(rawTours.get(rawTours.size()-1).rawTourToString());
+        pause();
+        printTourMenu();
+    }
+
+    private static void printAllPlannedTours() {
+        for (Tour plannedTour : plannedTours) {
+            System.out.println(plannedTour.plannedTourToString());
+            System.out.println("---------------------");
+        }
+        pause();
+        printTourMenu();
+    }
+
+    private static void printAllRawTours() {
+        for (Tour rawTour : rawTours) {
+            System.out.println(rawTour.rawTourToString());
+            System.out.println("---------------------");
+        }
+        pause();
+        printTourMenu();
     }
 
     private static void printAreaMenu() {
