@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class Tour {
@@ -20,6 +21,46 @@ public class Tour {
 
     static Scanner scanner = new Scanner(System.in);
 
+    public static void addPlannedTour(ArrayList<Tour> plannedTours, ArrayList<Tour> rawTours) {
+        Tour plannedTour = new Tour();
+        System.out.println(Tour.rawToursToString(rawTours));
+        System.out.print("Choose an area: ");
+        String name = scanner.nextLine();
+        for (Tour tour : rawTours) {
+            if (tour.getArea().getName().equalsIgnoreCase(name)) {
+                copyRawTourInPlannedTour(plannedTour,tour);
+                break;
+            }
+        }
+        System.out.println("Tour starts from: ");
+        plannedTour.setStart(Date.setDate());
+        System.out.println("Tour last day: ");
+        plannedTour.setEnd(Date.setDate());
+        System.out.println(TourLeader.tourLeaderNamesToString());
+        System.out.print("Enter tour leader's name: ");
+        name = scanner.nextLine();
+        for (TourLeader tourLeader : Main.tourLeaders) {
+            if (tourLeader.getFullName().equalsIgnoreCase(name)) {
+                plannedTour.setTourLeader(tourLeader);
+                break;
+            }
+        }
+        plannedTours.add(plannedTour);
+    }
+
+    public static void copyRawTourInPlannedTour(Tour planned, Tour raw) {
+        planned.setPlacesToVisit(raw.getPlacesToVisit());
+        planned.setDestination(raw.getDestination());
+        planned.setOrigin(raw.getOrigin());
+        planned.setByAirplane(raw.isByAirplane());
+        planned.setPrice(raw.getPrice());
+        planned.setMaxParticipant(raw.getMaxParticipant());
+        planned.setMinParticipant(raw.getMinParticipant());
+        planned.setForeign(raw.isForeign());
+        planned.setDuration(raw.getDuration());
+        planned.setArea(raw.getArea());
+    }
+
     public static void addRawTour(ArrayList<Tour> rawTours) {
         Tour tour = new Tour();
         tour.setArea(getAreaFromTerminal());
@@ -29,6 +70,36 @@ public class Tour {
         tour.setMinParticipant(getMinParticipantFromTerminal());
         tour.setPrice(getPriceFromTerminal());
         tour.setByAirplane(getVehicleFromTerminal());
+        if (!tour.isForeign()) {
+            tour.setOrigin(tour.getArea().getName());
+            tour.setDestination(tour.getArea().getName());
+        } else {
+            tour.setOrigin(getOriginFromTerminal());
+            tour.setDestination(getDestinationFromTerminal());
+        }
+        tour.setPlacesToVisit(getPlacesToVisitFromTerminal(tour));
+        rawTours.add(tour);
+    }
+
+    private static ArrayList<String> getPlacesToVisitFromTerminal(Tour tour) {
+        ArrayList<String> places = new ArrayList<>();
+        System.out.println(tour.getArea().placesToString());
+        System.out.println("Choose from these places");
+        for (int i = 0; i < tour.getDuration(); i++) {
+            System.out.print("Enter "+(i+1)+"st day's location or press enter: ");
+            places.add(scanner.nextLine());
+        }
+        return places;
+    }
+
+    private static String getDestinationFromTerminal() {
+        System.out.print("Enter the capital city: ");
+        return scanner.nextLine();
+    }
+
+    private static String getOriginFromTerminal() {
+        System.out.print("Enter the first city to visit: ");
+        return scanner.nextLine();
     }
 
     private static boolean getVehicleFromTerminal() {
@@ -79,6 +150,103 @@ public class Tour {
         Main.pause();
         Area.addArea(Main.areas);
         return Main.areas.get(Main.areas.size()-1);
+    }
+
+    public static Tour searchByArea(ArrayList<Tour> tours, String name) {
+        for (Tour tour : tours) {
+            if (tour.getArea().getName().equalsIgnoreCase(name)) {
+                return tour;
+            }
+        }
+        return null;
+    }
+
+    public static Tour searchByAreaAndDate(ArrayList<Tour> plannedTours, String name, Date date) {
+        for (Tour tour : plannedTours) {
+            if(tour.getArea().getName().equalsIgnoreCase(name) && tour.getStart().equals(date)) {
+                return tour;
+            }
+        }
+        return null;
+    }
+
+    public static String rawToursToString(ArrayList<Tour> rawTours) {
+        String string = "";
+        for (Tour tour : rawTours) {
+            string += tour.getArea().getName() + " ";
+        }
+        return string;
+    }
+
+    public static ArrayList<Tour> searchTourByDuration(ArrayList<Tour> tours, int duration) {
+        ArrayList<Tour> tours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            if (tour.getDuration() == duration) {
+                tours1.add(tour);
+            }
+        }
+        return tours1;
+    }
+
+    public static Tour searchByPlace(ArrayList<Tour> tours, String place) {
+        for (Tour tour : tours) {
+            for (String name : tour.getPlacesToVisit()) {
+                if (name.equalsIgnoreCase(place)) {
+                    return tour;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<Tour> searchByMinAndMaxParticipants(ArrayList<Tour> tours, int min, int max) {
+        ArrayList<Tour> tours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            if (tour.getMinParticipant() == min && tour.getMaxParticipant() == max) {
+                tours1.add(tour);
+            }
+        }
+        return tours1;
+    }
+
+    public static ArrayList<Tour> searchByPrice(ArrayList<Tour> tours, int price) {
+        ArrayList<Tour> tours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            if (tour.getPrice() == price) {
+                tours1.add(tour);
+            }
+        }
+        return tours1;
+    }
+
+    public static ArrayList<Tour> searchMoreExpensivePrice(ArrayList<Tour> tours, int price) {
+        ArrayList<Tour> tours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            if (tour.getPrice() > price) {
+                tours1.add(tour);
+            }
+        }
+        return tours1;
+    }
+
+    public static ArrayList<Tour> searchCheaperPrice(ArrayList<Tour> tours, int price) {
+        ArrayList<Tour> tours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            if (tour.getPrice() < price) {
+                tours1.add(tour);
+            }
+        }
+        return tours1;
+    }
+
+    public static ArrayList<Tour> searchBetween2Price(ArrayList<Tour> tours, int min, int max) {
+        ArrayList<Tour> tours1 = new ArrayList<>();
+        for (Tour tour : tours) {
+            if (tour.getPrice() > min && tour.getPrice() < max) {
+                tours1.add(tour);
+            }
+        }
+        return tours1;
     }
 
     public String plannedTourToString() {

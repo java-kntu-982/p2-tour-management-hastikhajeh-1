@@ -188,6 +188,14 @@ public class TourLeader {
         return wanted;
     }
 
+    public static String tourLeaderNamesToString() {
+        String string = "";
+        for (TourLeader tourLeader : Main.tourLeaders) {
+            string += tourLeader.getFirstName() + " " + tourLeader.getLastName() + ", ";
+        }
+        return string;
+    }
+
     public String toString() {
         return  "TourLeader" + "\n" +
                 "firstName: " + firstName + '\n' +
@@ -199,7 +207,9 @@ public class TourLeader {
                 "areas: " + Area.allNamesToString(areas);
     }
 
-
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 
     public String getFirstName() {
         return firstName;
