@@ -3,7 +3,7 @@ package ir.ac.kntu;
 import ir.ac.kntu.maputil.MapUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -47,19 +47,32 @@ public class Main {
         }
     }
 
+    public static int getInt(String string) {
+        int integer = 0;
+        do {
+            try {
+                System.out.print(string);
+                integer = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid intput");
+            }
+            scanner.nextLine();
+        } while (integer <= 0);
+        return integer;
+    }
+
     private static void printMenu() {
         clearScreen();
         System.out.println("1. Tour leader menu");
         System.out.println("2. Tour menu");
-        System.out.println("3. Region menu");
+        System.out.println("3. Area menu");
         System.out.println("4. Map menu");
         System.out.println("5. change today's date");
         menu();
     }
 
     private static void menu() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
                 printTourLeaderMenu();
@@ -71,6 +84,7 @@ public class Main {
                 printAreaMenu();
                 break;
             case 4:
+                printMapMenu();
                 break;
             case 5:
                 setToday();
@@ -78,6 +92,150 @@ public class Main {
             default:
                 menu();
         }
+    }
+
+    private static void printMapMenu() {
+        clearScreen();
+        System.out.println("1. show origin");
+        System.out.println("2. show destination");
+        System.out.println("3. show origin and destination");
+        System.out.println("4. show the current area for the foreign tours");
+        System.out.println("5. show all the places for foreign tours");
+        System.out.println("6. show a city or country");
+        System.out.println("7. show 2 cities");
+        System.out.println("8. back to main menu");
+        mapMenu();
+    }
+
+    private static void mapMenu() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                showOriginOnMap();
+                break;
+            case 2:
+                showDestinationOnMap();
+                break;
+            case 3:
+                showOriginAndDestinationOnMap();
+                break;
+            case 4:
+                showCurrentLocation();
+                break;
+            case 5:
+                showAllPlaces();
+                break;
+            case 6:
+                showOneOnMap();
+                break;
+            case 7:
+                showTwoOnMap();
+                break;
+            case 8:
+                printMenu();
+                break;
+            default:
+                mapMenu();
+        }
+    }
+
+    private static void showAllPlaces() {
+        System.out.print("enter the area's name: ");
+        String name = scanner.nextLine();
+        System.out.println("enter the first day");
+        Date date = new Date(Date.setDate());
+        for (Tour planned : plannedTours) {
+            if (planned.getArea().getName().equalsIgnoreCase(name) && planned.getStart().equals(date) && planned.isForeign()) {
+                for (String place : planned.getPlacesToVisit()) {
+                    MapUtil.showMap(place);
+                }
+                break;
+            }
+        }
+        pause();
+        printMenu();
+    }
+
+    private static void showCurrentLocation() {
+        System.out.print("enter the area's name: ");
+        scanner.nextLine();
+        String name = scanner.nextLine();
+        System.out.println("enter the first day");
+        Date date = new Date(Date.setDate());
+        boolean flag = true;
+        for (Tour planned : plannedTours) {
+            if (planned.getArea().getName().equalsIgnoreCase(name) && planned.getStart().equals(date) && planned.isForeign()) {
+                for (int i = 0; i < planned.getPlacesToVisit().size(); i++) {
+                    if (today.equals(planned.getStart().nextDay(i))) {
+                        MapUtil.showMap(planned.getPlacesToVisit().get(i));
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    MapUtil.showMap("Tehran");
+                }
+                break;
+            } else {
+                System.out.println("nothing found");
+            }
+        }
+        pause();
+        printMenu();
+    }
+
+    private static void showOriginAndDestinationOnMap() {
+        System.out.print("Enter the area name: ");
+        String name = scanner.nextLine();
+        if (Tour.searchByArea(plannedTours,name) == null) {
+            System.out.println("nothing found");
+        } else {
+            MapUtil.showMap(Tour.searchByArea(plannedTours,name).getOrigin(), Tour.searchByArea(plannedTours,name).getDestination());
+        }
+        pause();
+        printMenu();
+    }
+
+    private static void showDestinationOnMap() {
+        System.out.print("Enter the area name: ");
+        String name = scanner.nextLine();
+        if (Tour.searchByArea(plannedTours,name) == null) {
+            System.out.println("nothing found");
+        } else {
+            MapUtil.showMap(Tour.searchByArea(plannedTours,name).getDestination());
+        }
+        pause();
+        printMenu();
+    }
+
+    private static void showOriginOnMap() {
+        System.out.print("Enter the area name: ");
+        String name = scanner.nextLine();
+        if (Tour.searchByArea(plannedTours,name) == null) {
+            System.out.println("nothing found");
+        } else {
+            MapUtil.showMap(Tour.searchByArea(plannedTours,name).getOrigin());
+        }
+        pause();
+        printMenu();
+    }
+
+    private static void showTwoOnMap() {
+        System.out.print("Enter the first area: ");
+        String name1 = scanner.nextLine();
+        System.out.print("Enter the second area: ");
+        String name2 = scanner.nextLine();
+        MapUtil.showMap(name1, name2);
+        pause();
+        printMenu();
+    }
+
+    private static void showOneOnMap() {
+        System.out.print("Enter the name: ");
+        String name = scanner.nextLine();
+        MapUtil.showMap(name);
+        pause();
+        printMenu();
     }
 
     private static void printTourMenu() {
@@ -96,8 +254,7 @@ public class Main {
     }
 
     private static void tourMenu() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
                 printAllRawTours();
@@ -124,12 +281,134 @@ public class Main {
                 printRawTourSearch();
                 break;
             case 9:
+                printPlannedTourSearch();
                 break;
             case 10:
+                printMenu();
                 break;
             default:
                 tourMenu();
         }
+    }
+
+    private static void printPlannedTourSearch() {
+        clearScreen();
+        System.out.println("1. search by tour leader");
+        System.out.println("2. search by date");
+        System.out.println("3. search by duration");
+        System.out.println("4. search by places to visit");
+        System.out.println("5. search by area");
+        System.out.println("6. search by min and man participants");
+        System.out.println("7. search by price");
+        System.out.println("8. back to tour menu");
+        plannedTourSearch();
+    }
+
+    private static void plannedTourSearch() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                searchPlannedTourByTourLeader();
+                break;
+            case 2:
+                printSearchPlannedTourByDate();
+                break;
+            case 3:
+                searchTourByDuration(plannedTours);
+                break;
+            case 4:
+                searchTourByPlaces(plannedTours);
+                break;
+            case 5:
+                searchTourByArea(plannedTours);
+                break;
+            case 6:
+                searchByMinAndMaxParticipants(plannedTours);
+                break;
+            case 7:
+                printSearchTourByPrice(plannedTours);
+                break;
+            case 8:
+                printTourMenu();
+                break;
+            default:
+                plannedTourSearch();
+        }
+    }
+
+    private static void printSearchPlannedTourByDate() {
+        clearScreen();
+        System.out.println("1. after a date");
+        System.out.println("2. before a date");
+        System.out.println("3. between 2 dates");
+        searchPlannedTourByDate();
+    }
+
+    private static void searchPlannedTourByDate() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                searchPlannedTourAfterDate();
+                break;
+            case 2:
+                searchPlannedTourBeforeDate();
+                break;
+            case 3:
+                searchPlannedTourBetween2Date();
+                break;
+            default:
+                searchPlannedTourByDate();
+        }
+    }
+
+    private static void searchPlannedTourBetween2Date() {
+        Date date1 = Date.setDate();
+        Date date2 = Date.setDate();
+        for (Tour tour : plannedTours) {
+            if (tour.getStart().compareTo(date1) > 0 && tour.getStart().compareTo(date2) < 0) {
+                System.out.println(tour.plannedTourToString());
+                System.out.println("_____________");
+            }
+        }
+        pause();
+        printTourMenu();
+    }
+
+    private static void searchPlannedTourBeforeDate() {
+        Date date = Date.setDate();
+        for (Tour tour : plannedTours) {
+            if (tour.getStart().compareTo(date) < 0) {
+                System.out.println(tour.plannedTourToString());
+                System.out.println("_____________");
+            }
+        }
+        pause();
+        printTourMenu();
+    }
+
+    private static void searchPlannedTourAfterDate() {
+        Date date = Date.setDate();
+        for (Tour tour : plannedTours) {
+            if (tour.getStart().compareTo(date) > 0) {
+                System.out.println(tour.plannedTourToString());
+                System.out.println("_____________");
+            }
+        }
+        pause();
+        printTourMenu();
+    }
+
+    private static void searchPlannedTourByTourLeader() {
+        System.out.print("Enter tour leader's full name: ");
+        String name = scanner.nextLine();
+        for (Tour tour : plannedTours) {
+            if (tour.getTourLeader().getFullName().equalsIgnoreCase(name)) {
+                System.out.println(tour.plannedTourToString());
+                System.out.println("________________");
+            }
+        }
+        pause();
+        printTourMenu();
     }
 
     private static void printRawTourSearch() {
@@ -144,23 +423,22 @@ public class Main {
     }
 
     private static void rawTourSearch() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
-                searchTourByDuration();
+                searchTourByDuration(rawTours);
                 break;
             case 2:
-                searchTourByPlaces();
+                searchTourByPlaces(rawTours);
                 break;
             case 3:
-                searchTourByArea();
+                searchTourByArea(rawTours);
                 break;
             case 4:
-                searchByMinAndMaxParticipants();
+                searchByMinAndMaxParticipants(rawTours);
                 break;
             case 5:
-                printSearchTourByPrice();
+                printSearchTourByPrice(rawTours);
                 break;
             case 6:
                 printMenu();
@@ -170,50 +448,51 @@ public class Main {
         }
     }
 
-    private static void printSearchTourByPrice() {
+    private static void printSearchTourByPrice(ArrayList<Tour> tours) {
         clearScreen();
         System.out.println("1. search for a prince");
         System.out.println("2. search for more expensive tours");
         System.out.println("3. search for cheaper tours");
         System.out.println("4. search between 2 prices");
         System.out.println("5. back to tour menu");
-        searchTourByPrice();
+        searchTourByPrice(tours);
     }
 
-    private static void searchTourByPrice() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+    private static void searchTourByPrice(ArrayList<Tour> tours) {
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
-                searchTourByGivenPrice();
+                searchTourByGivenPrice(tours);
                 break;
             case 2:
-                searchTourMoreExpensiveThanGivenPrice();
+                searchTourMoreExpensiveThanGivenPrice(tours);
                 break;
             case 3:
-                searchTourCheaperThanGivenPrice();
+                searchTourCheaperThanGivenPrice(tours);
                 break;
             case 4:
-                searchBetween2Price();
+                searchBetween2Price(tours);
                 break;
             case 5:
                 printTourMenu();
                 break;
             default:
-                searchTourByPrice();
+                searchTourByPrice(tours);
         }
     }
 
-    private static void searchBetween2Price() {
-        System.out.print("Enter minimum price: ");
-        int min = scanner.nextInt();
-        System.out.print("Enter maximum price: ");
-        int max = scanner.nextInt();
-        if (Tour.searchBetween2Price(rawTours, min, max).size() == 0) {
+    private static void searchBetween2Price(ArrayList<Tour> tours) {
+        int min = getInt("Enter minimum price: ");
+        int max = getInt("Enter maximum price: ");
+        if (Tour.searchBetween2Price(tours, min, max).size() == 0) {
             System.out.println("nothing found");
         } else {
-            for (Tour tour : Tour.searchBetween2Price(rawTours, min, max)) {
-                System.out.println(tour.rawTourToString());
+            for (Tour tour : Tour.searchBetween2Price(tours, min, max)) {
+                if (tour.isRaw()) {
+                    System.out.println(tour.rawTourToString());
+                } else {
+                    System.out.println(tour.plannedTourToString());
+                }
                 System.out.println("________________");
             }
         }
@@ -221,14 +500,17 @@ public class Main {
         printTourMenu();
     }
 
-    private static void searchTourCheaperThanGivenPrice() {
-        System.out.print("Enter price: ");
-        int price = scanner.nextInt();
-        if (Tour.searchCheaperPrice(rawTours, price).size() == 0) {
+    private static void searchTourCheaperThanGivenPrice(ArrayList<Tour> tours) {
+        int price = getInt("Enter price: ");
+        if (Tour.searchCheaperPrice(tours, price).size() == 0) {
             System.out.println("nothing found");
         } else {
-            for (Tour tour : Tour.searchCheaperPrice(rawTours, price)) {
-                System.out.println(tour.rawTourToString());
+            for (Tour tour : Tour.searchCheaperPrice(tours, price)) {
+                if (tour.isRaw()) {
+                    System.out.println(tour.rawTourToString());
+                } else {
+                    System.out.println(tour.plannedTourToString());
+                }
                 System.out.println("________________");
             }
         }
@@ -236,14 +518,17 @@ public class Main {
         printTourMenu();
     }
 
-    private static void searchTourMoreExpensiveThanGivenPrice() {
-        System.out.print("Enter price: ");
-        int price = scanner.nextInt();
-        if (Tour.searchMoreExpensivePrice(rawTours, price).size() == 0) {
+    private static void searchTourMoreExpensiveThanGivenPrice(ArrayList<Tour> tours) {
+        int price = getInt("Enter price: ");
+        if (Tour.searchMoreExpensivePrice(tours, price).size() == 0) {
             System.out.println("nothing found");
         } else {
-            for (Tour tour : Tour.searchMoreExpensivePrice(rawTours, price)) {
-                System.out.println(tour.rawTourToString());
+            for (Tour tour : Tour.searchMoreExpensivePrice(tours, price)) {
+                if (tour.isRaw()) {
+                    System.out.println(tour.rawTourToString());
+                } else {
+                    System.out.println(tour.plannedTourToString());
+                }
                 System.out.println("________________");
             }
         }
@@ -251,14 +536,17 @@ public class Main {
         printTourMenu();
     }
 
-    private static void searchTourByGivenPrice() {
-        System.out.print("Enter price: ");
-        int price = scanner.nextInt();
-        if (Tour.searchByPrice(rawTours, price).size() == 0) {
+    private static void searchTourByGivenPrice(ArrayList<Tour> tours) {
+        int price = getInt("Enter price: ");
+        if (Tour.searchByPrice(tours, price).size() == 0) {
             System.out.println("nothing found");
         } else {
-            for (Tour tour : Tour.searchByPrice(rawTours, price)) {
-                System.out.println(tour.rawTourToString());
+            for (Tour tour : Tour.searchByPrice(tours, price)) {
+                if (tour.isRaw()) {
+                    System.out.println(tour.rawTourToString());
+                } else {
+                    System.out.println(tour.plannedTourToString());
+                }
                 System.out.println("________________");
             }
         }
@@ -266,16 +554,18 @@ public class Main {
         printTourMenu();
     }
 
-    private static void searchByMinAndMaxParticipants() {
-        System.out.print("Enter minimum participants: ");
-        int min = scanner.nextInt();
-        System.out.print("Enter maximum participants: ");
-        int max = scanner.nextInt();
-        if (Tour.searchByMinAndMaxParticipants(rawTours, min, max).size() == 0) {
+    private static void searchByMinAndMaxParticipants(ArrayList<Tour> tours) {
+        int min = getInt("Enter minimum participants: ");
+        int max = getInt("Enter maximum participants: ");
+        if (Tour.searchByMinAndMaxParticipants(tours, min, max).size() == 0) {
             System.out.println("nothing found");
         } else {
-            for (Tour tour : Tour.searchByMinAndMaxParticipants(rawTours, min, max)) {
-                System.out.println(tour.rawTourToString());
+            for (Tour tour : Tour.searchByMinAndMaxParticipants(tours, min, max)) {
+                if (tour.isRaw()) {
+                    System.out.println(tour.rawTourToString());
+                } else {
+                    System.out.println(tour.plannedTourToString());
+                }
                 System.out.println("________________");
             }
         }
@@ -283,38 +573,54 @@ public class Main {
         printTourMenu();
     }
 
-    private static void searchTourByArea() {
+    private static void searchTourByArea(ArrayList<Tour> tours) {
         System.out.print("Enter Area's name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
-        if (Tour.searchByArea(rawTours, name) == null) {
+        if (Tour.searchByArea(tours, name) == null) {
             System.out.println("nothing found");
         } else {
-            System.out.println(Tour.searchByArea(rawTours, name).rawTourToString());
-        }
-        pause();
-        printTourMenu();
-    }
-
-    private static void searchTourByPlaces() {
-        System.out.print("Enter place: ");
-        String place = scanner.nextLine();
-        if (Tour.searchByPlace(rawTours, place) == null) {
-            System.out.println("nothing found");
-        } else {
-            System.out.println(Tour.searchByPlace(rawTours, place).rawTourToString());
-        }
-        pause();
-        printTourMenu();
-    }
-
-    private static void searchTourByDuration() {
-        System.out.print("Enter duration: ");
-        int duration = scanner.nextInt();
-        if (Tour.searchTourByDuration(rawTours, duration).size() == 0) {
-            System.out.println("nothing found");
-        } else {
-            for (Tour tour : Tour.searchTourByDuration(rawTours, duration)) {
+            Tour tour = Tour.searchByArea(tours, name);
+            if (tour.isRaw()) {
                 System.out.println(tour.rawTourToString());
+            } else {
+                System.out.println(tour.plannedTourToString());
+            }
+        }
+        pause();
+        printTourMenu();
+    }
+
+    private static void searchTourByPlaces(ArrayList<Tour> tours) {
+        System.out.print("Enter place: ");
+        scanner.nextLine();
+        String place = scanner.nextLine();
+        if (Tour.searchByPlace(tours, place) == null) {
+            System.out.println("nothing found");
+        } else {
+            Tour tour = Tour.searchByPlace(tours, place);
+            if (tour.isRaw()) {
+                System.out.println(tour.rawTourToString());
+            } else {
+                System.out.println(tour.plannedTourToString());
+            }
+        }
+        pause();
+        printTourMenu();
+    }
+
+    private static void searchTourByDuration(ArrayList<Tour> tours) {
+        System.out.print("Enter duration: ");
+        int duration = getInt("Enter duration: ");
+        if (Tour.searchTourByDuration(tours, duration).size() == 0) {
+            System.out.println("nothing found");
+        } else {
+            for (Tour tour : Tour.searchTourByDuration(tours, duration)) {
+                if (tour.isRaw()) {
+                    System.out.println(tour.rawTourToString());
+                } else {
+                    System.out.println(tour.plannedTourToString());
+                }
                 System.out.println("________________");
             }
         }
@@ -412,8 +718,7 @@ public class Main {
     }
 
     private static void areaMenu() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
                 printAllAreas();
@@ -437,6 +742,7 @@ public class Main {
 
     private static void removeArea() {
         System.out.print("Enter areas name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
         if (Area.searchByName(areas, name) == null) {
             System.out.println("no area found");
@@ -451,6 +757,7 @@ public class Main {
 
     private static void editArea() {
         System.out.print("Enter areas name: ");
+        scanner.nextLine();
         String name = scanner.nextLine();
         if (Area.searchByName(areas, name) == null) {
             System.out.println("no area found");
@@ -472,6 +779,7 @@ public class Main {
     }
 
     private static void printAllAreas() {
+        clearScreen();
         for (Area area : areas) {
             System.out.println(area.toString());
             System.out.println("---------------------");
@@ -491,8 +799,7 @@ public class Main {
     }
 
     private static void tourLeaderMenu() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
                 printAllTourLeaders();
@@ -525,8 +832,7 @@ public class Main {
     }
 
     private static void tourLeaderSearchMenu() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
                 searchTourLeaderByName();
@@ -559,8 +865,7 @@ public class Main {
     }
 
     private static void searchByAgeMenu() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = getInt("Enter your choice: ");
         switch (choice) {
             case 1:
                 searchByGivenAge();
@@ -584,10 +889,8 @@ public class Main {
 
     private static void searchBetween2Ages() {
         System.out.println("Enter age: ");
-        System.out.print("from: ");
-        int age1 = scanner.nextInt();
-        System.out.print("to: ");
-        int age2 = scanner.nextInt();
+        int age1 = getInt("from: ");
+        int age2 = getInt("to: ");
         if (TourLeader.searchBetween2Ages(tourLeaders, age1, age2, today).size() == 0) {
             System.out.println("no one found");
         } else {
@@ -601,8 +904,7 @@ public class Main {
     }
 
     private static void searchYoungerThan() {
-        System.out.print("Enter the age: ");
-        int age = scanner.nextInt();
+        int age = getInt("Enter the age: ");
         if (TourLeader.searchYoungerThan(tourLeaders, age, today).size() == 0) {
             System.out.println("no one found");
         } else {
@@ -616,8 +918,7 @@ public class Main {
     }
 
     private static void searchOlderThan() {
-        System.out.print("Enter the age: ");
-        int age = scanner.nextInt();
+        int age = getInt("Enter the age: ");
         if (TourLeader.searchOlderThan(tourLeaders, age, today).size() == 0) {
             System.out.println("no one found");
         } else {
@@ -632,8 +933,7 @@ public class Main {
 
     private static void searchByGivenAge() {
         clearScreen();
-        System.out.print("Enter the age: ");
-        int age = scanner.nextInt();
+        int age = getInt("Enter the age: ");
         if (TourLeader.searchByAge(tourLeaders, age, today).size() == 0) {
             System.out.println("no one found");
         } else {

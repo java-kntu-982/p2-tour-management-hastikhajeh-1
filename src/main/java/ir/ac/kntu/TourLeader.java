@@ -1,18 +1,17 @@
 package ir.ac.kntu;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class TourLeader {
     private String firstName;
     private String lastName;
     private String nationalCode;
-    private Date DOB;
-    private Date DOE;
+    private Date dob;
+    private Date doe;
     private boolean single;
     private ArrayList<Area> areas;
-    private boolean available = true;
+    private ArrayList<Date> dot;
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -35,6 +34,8 @@ public class TourLeader {
         tourLeader.setSingle(getMaritalStatusFromTerminal());
 
         tourLeader.setAreas(getAreaFromTerminal());
+
+        tourLeader.setDot(new ArrayList<>());
 
         tourLeaders.add(tourLeader);
     }
@@ -66,8 +67,7 @@ public class TourLeader {
     public static boolean getMaritalStatusFromTerminal() {
         System.out.println("1. Single");
         System.out.println("2. married");
-        System.out.print("Enter Marital status: ");
-        int choice = scanner.nextInt();
+        int choice = Main.getInt("Enter Marital status: ");
         switch (choice) {
             case 1: return true;
             case 2: return false;
@@ -80,8 +80,7 @@ public class TourLeader {
         ArrayList<Area> areas = new ArrayList<>();
         System.out.println("Defined areas: ");
         System.out.println(Area.allNamesToString(Main.areas));
-        System.out.print("How many areas do you want to add? ");
-        int n = scanner.nextInt();
+        int n = Main.getInt("How many areas do you want to add? ");
         System.out.println("Enter the area's name: ");
         String name;
         boolean flag;
@@ -188,6 +187,15 @@ public class TourLeader {
         return wanted;
     }
 
+    public boolean isAvailable( Date date1, Date date2) {
+        for (int i = 0; i < dot.size(); i+=2) {
+            if (date2.compareTo(dot.get(i)) >= 0 && date1.compareTo(dot.get(i+1)) <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String tourLeaderNamesToString() {
         String string = "";
         for (TourLeader tourLeader : Main.tourLeaders) {
@@ -201,8 +209,8 @@ public class TourLeader {
                 "firstName: " + firstName + '\n' +
                 "lastName: " + lastName + '\n' +
                 "nationalCode: " + nationalCode + '\n' +
-                "date of birth: " + DOB.toString() + "\n" +
-                "date of employment: " + DOE.toString() + "\n" +
+                "date of birth: " + dob.toString() + "\n" +
+                "date of employment: " + doe.toString() + "\n" +
                 "marital status: " + (single ? "single":"married") + "\n" +
                 "areas: " + Area.allNamesToString(areas);
     }
@@ -240,19 +248,19 @@ public class TourLeader {
     }
 
     public Date getDOB() {
-        return DOB;
+        return dob;
     }
 
-    public void setDOB(Date DOB) {
-        this.DOB = DOB;
+    public void setDOB(Date dob) {
+        this.dob = dob;
     }
 
     public Date getDOE() {
-        return DOE;
+        return doe;
     }
 
-    public void setDOE(Date DOE) {
-        this.DOE = DOE;
+    public void setDOE(Date doe) {
+        this.doe = doe;
     }
 
     public boolean isSingle() {
@@ -271,12 +279,11 @@ public class TourLeader {
         this.areas = areas;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public ArrayList<Date> getDot() {
+        return dot;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setDot(ArrayList<Date> dot) {
+        this.dot = dot;
     }
-
 }

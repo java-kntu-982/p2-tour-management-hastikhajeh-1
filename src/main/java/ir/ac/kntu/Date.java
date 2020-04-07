@@ -76,7 +76,7 @@ public class Date {
         if (curDate.month == 12) {
             handleTheLastMonth(curDate, nextDate);
         } else if (curDate.day < 30) {
-            curDate.day++;
+            nextDate.day++;
         } else if (curDate.day == 30 && curDate.month < 7) {
             nextDate.day++;
         } else {
@@ -121,12 +121,9 @@ public class Date {
 
     public static Date setDate() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("enter year: ");
-        int year = scanner.nextInt();
-        System.out.print("enter month: ");
-        int month = scanner.nextInt();
-        System.out.print("enter day: ");
-        int day = scanner.nextInt();
+        int year = Main.getInt("enter year: ");
+        int month = Main.getInt("enter month: ");
+        int day = Main.getInt("enter day: ");
         Date date = new Date(year,month,day);
         return date;
     }
@@ -148,5 +145,58 @@ public class Date {
     @Override
     public int hashCode() {
         return Objects.hash(year, month, day);
+    }
+
+    public int compareTo(Date date) {
+        if (year > date.getYear()) {
+            return 1;
+        } else if (year < date.getYear()) {
+            return -1;
+        } else if (month > date.month) {
+            return 1;
+        } else if (month < date.month) {
+            return -1;
+        } else if (day > date.day) {
+            return 1;
+        } else if (day < date.day) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    public Date nextDay(int n) {
+        if (n == 0) {
+            return this;
+        }
+        Date nextDate = new Date(this);
+        if (nextDate.month == 12) {
+            handleTheLastMonth(nextDate, nextDate);
+        } else if (nextDate.day < 30) {
+            nextDate.day++;
+        } else if (nextDate.day == 30 && nextDate.month < 7) {
+            nextDate.day++;
+        } else {
+            nextDate.day = 1;
+            nextDate.month++;
+        }
+        if (n == 1) {
+            return nextDate;
+        } else {
+            return nextDate.nextDay(n-1);
+        }
+    }
+
+    public boolean isInBetween(Date date1, Date date2) {
+        while (true) {
+            if (this.equals(date1)) {
+                return true;
+            }
+            if (date1.equals(date2)) {
+                break;
+            }
+            date1 = date1.nextDay();
+        }
+        return false;
     }
 }

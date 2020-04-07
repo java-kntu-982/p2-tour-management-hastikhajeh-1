@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Scanner;
 
 public class Tour {
+    private boolean raw;
     private int duration;
     private int price;
     private int maxParticipant;
@@ -23,6 +24,7 @@ public class Tour {
 
     public static void addPlannedTour(ArrayList<Tour> plannedTours, ArrayList<Tour> rawTours) {
         Tour plannedTour = new Tour();
+        plannedTour.setRaw(false);
         System.out.println(Tour.rawToursToString(rawTours));
         System.out.print("Choose an area: ");
         String name = scanner.nextLine();
@@ -34,15 +36,25 @@ public class Tour {
         }
         System.out.println("Tour starts from: ");
         plannedTour.setStart(Date.setDate());
-        System.out.println("Tour last day: ");
-        plannedTour.setEnd(Date.setDate());
-        System.out.println(TourLeader.tourLeaderNamesToString());
-        System.out.print("Enter tour leader's name: ");
-        name = scanner.nextLine();
-        for (TourLeader tourLeader : Main.tourLeaders) {
-            if (tourLeader.getFullName().equalsIgnoreCase(name)) {
-                plannedTour.setTourLeader(tourLeader);
-                break;
+        plannedTour.getTourLeader().getDot().add(plannedTour.getStart());
+        plannedTour.setEnd(plannedTour.getStart().nextDay(plannedTour.getDuration()));
+        plannedTour.getTourLeader().getDot().add(plannedTour.getEnd());
+        boolean flag = true;
+        while (flag) {
+            System.out.println(TourLeader.tourLeaderNamesToString());
+            System.out.print("Enter tour leader's full name: ");
+            name = scanner.nextLine();
+            plannedTour.setTourLeader(new TourLeader());
+            for (TourLeader tourLeader : Main.tourLeaders) {
+                if (tourLeader.getFullName().equalsIgnoreCase(name)) {
+                    if (tourLeader.isAvailable(plannedTour.start, plannedTour.end)) {
+                        flag = false;
+                        plannedTour.setTourLeader(tourLeader);
+                    } else {
+                        System.out.println("this leader is not available");
+                    }
+                    break;
+                }
             }
         }
         plannedTours.add(plannedTour);
@@ -63,6 +75,7 @@ public class Tour {
 
     public static void addRawTour(ArrayList<Tour> rawTours) {
         Tour tour = new Tour();
+        tour.setRaw(true);
         tour.setArea(getAreaFromTerminal());
         tour.setDuration(getDurationFromTerminal());
         tour.setForeign(tour.getArea().isForeign());
@@ -99,14 +112,14 @@ public class Tour {
 
     private static String getOriginFromTerminal() {
         System.out.print("Enter the first city to visit: ");
+        scanner.nextLine();
         return scanner.nextLine();
     }
 
     private static boolean getVehicleFromTerminal() {
         System.out.println("1. Air transport");
         System.out.println("2. Land transport");
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = Main.getInt("Enter your choice: ");
         switch (choice) {
             case 1: return true;
             case 2: return false;
@@ -116,30 +129,25 @@ public class Tour {
     }
 
     private static int getPriceFromTerminal() {
-        System.out.print("Enter price: ");
-        return scanner.nextInt();
+        return Main.getInt("Enter price: ");
     }
 
     private static int getMinParticipantFromTerminal() {
-        System.out.print("Enter minimum participants: ");
-        return scanner.nextInt();
+        return Main.getInt("Enter minimum participants: ");
     }
 
     private static int getMaxParticipantFromTerminal() {
-        System.out.print("Enter maximum participants: ");
-        return scanner.nextInt();
+        return Main.getInt("Enter maximum participants: ");
     }
 
     private static int getDurationFromTerminal() {
-        System.out.print("Enter duration: ");
-        return scanner.nextInt();
+        return Main.getInt("Enter duration: ");
     }
 
     private static Area getAreaFromTerminal() {
         System.out.println("Defined areas: ");
         System.out.println(Area.allNamesToString(Main.areas));
         System.out.println("Enter the area's name: ");
-        scanner.nextLine();
         String name = scanner.nextLine();
         for (Area area : Main.areas) {
             if (area.getName().equalsIgnoreCase(name)) {
@@ -391,4 +399,13 @@ public class Tour {
     public void setTourLeader(TourLeader tourLeader) {
         this.tourLeader = tourLeader;
     }
+
+    public boolean isRaw() {
+        return raw;
+    }
+
+    public void setRaw(boolean raw) {
+        this.raw = raw;
+    }
+
 }

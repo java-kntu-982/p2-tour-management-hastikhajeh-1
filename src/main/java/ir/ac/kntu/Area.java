@@ -18,8 +18,7 @@ public class Area {
         scanner.nextLine();
         System.out.print("Enter areas name: ");
         area.setName(scanner.nextLine());
-        System.out.print("how many places do you want to add? ");
-        int n = scanner.nextInt();
+        int n = Main.getInt("how many places do you want to add? ");
         System.out.println("Enter the places: ");
         scanner.nextLine();
         String name;
@@ -35,8 +34,7 @@ public class Area {
         Main.clearScreen();
         System.out.println("1. Foreign");
         System.out.println("2. Domestic");
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
+        int choice = Main.getInt("Enter your choice: ");
         switch (choice) {
             case 1: return true;
             case 2: return false;
