@@ -36,27 +36,32 @@ public class Tour {
         }
         System.out.println("Tour starts from: ");
         plannedTour.setStart(Date.setDate());
-        plannedTour.getTourLeader().getDot().add(plannedTour.getStart());
         plannedTour.setEnd(plannedTour.getStart().nextDay(plannedTour.getDuration()));
-        plannedTour.getTourLeader().getDot().add(plannedTour.getEnd());
         boolean flag = true;
         while (flag) {
             System.out.println(TourLeader.tourLeaderNamesToString());
-            System.out.print("Enter tour leader's full name: ");
+            System.out.print("Enter tour leader's full name or enter \"cancel\" and add tour leader: ");
             name = scanner.nextLine();
-            plannedTour.setTourLeader(new TourLeader());
-            for (TourLeader tourLeader : Main.tourLeaders) {
-                if (tourLeader.getFullName().equalsIgnoreCase(name)) {
-                    if (tourLeader.isAvailable(plannedTour.start, plannedTour.end)) {
-                        flag = false;
-                        plannedTour.setTourLeader(tourLeader);
-                    } else {
-                        System.out.println("this leader is not available");
+            if (name.equalsIgnoreCase("cancel")) {
+                TourLeader.addTourLeader(Main.tourLeaders);
+                continue;
+            } else {
+                plannedTour.setTourLeader(new TourLeader());
+                for (TourLeader tourLeader : Main.tourLeaders) {
+                    if (tourLeader.getFullName().equalsIgnoreCase(name) && tourLeader.getAreas().contains(plannedTour.getArea())) {
+                        if (tourLeader.isAvailable(plannedTour.start, plannedTour.end)) {
+                            flag = false;
+                            plannedTour.setTourLeader(tourLeader);
+                        } else {
+                            System.out.println("this leader is not available");
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
+        plannedTour.getTourLeader().getDot().add(plannedTour.getEnd());
+        plannedTour.getTourLeader().getDot().add(plannedTour.getStart());
         plannedTours.add(plannedTour);
     }
 
@@ -112,7 +117,6 @@ public class Tour {
 
     private static String getOriginFromTerminal() {
         System.out.print("Enter the first city to visit: ");
-        scanner.nextLine();
         return scanner.nextLine();
     }
 

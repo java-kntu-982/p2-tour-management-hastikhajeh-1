@@ -15,12 +15,10 @@ public class Area {
     public static void addArea(ArrayList<Area> areas) {
         Area area = new Area();
         area.setForeign(getForeignFromTerminal());
-        scanner.nextLine();
         System.out.print("Enter areas name: ");
         area.setName(scanner.nextLine());
         int n = Main.getInt("how many places do you want to add? ");
         System.out.println("Enter the places: ");
-        scanner.nextLine();
         String name;
         area.setPlaces(new ArrayList<>());
         for (int i = 0; i < n; i++) {

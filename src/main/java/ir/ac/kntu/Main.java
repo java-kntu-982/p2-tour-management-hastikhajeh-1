@@ -575,7 +575,6 @@ public class Main {
 
     private static void searchTourByArea(ArrayList<Tour> tours) {
         System.out.print("Enter Area's name: ");
-        scanner.nextLine();
         String name = scanner.nextLine();
         if (Tour.searchByArea(tours, name) == null) {
             System.out.println("nothing found");
@@ -593,7 +592,6 @@ public class Main {
 
     private static void searchTourByPlaces(ArrayList<Tour> tours) {
         System.out.print("Enter place: ");
-        scanner.nextLine();
         String place = scanner.nextLine();
         if (Tour.searchByPlace(tours, place) == null) {
             System.out.println("nothing found");
@@ -610,7 +608,6 @@ public class Main {
     }
 
     private static void searchTourByDuration(ArrayList<Tour> tours) {
-        System.out.print("Enter duration: ");
         int duration = getInt("Enter duration: ");
         if (Tour.searchTourByDuration(tours, duration).size() == 0) {
             System.out.println("nothing found");
@@ -637,6 +634,8 @@ public class Main {
             System.out.println("no tour found");
         } else {
             plannedTours.remove(Tour.searchByAreaAndDate(plannedTours, name, date));
+            Tour.searchByAreaAndDate(plannedTours, name, date).getTourLeader().getDot().remove(Tour.searchByAreaAndDate(plannedTours, name, date).getStart());
+            Tour.searchByAreaAndDate(plannedTours, name, date).getTourLeader().getDot().remove(Tour.searchByAreaAndDate(plannedTours, name, date).getEnd());
             System.out.println("tour is removed");
         }
         pause();
@@ -652,6 +651,8 @@ public class Main {
             System.out.println("no tour found");
         } else {
             System.out.println(Tour.searchByAreaAndDate(plannedTours, name ,date).plannedTourToString());
+            Tour.searchByAreaAndDate(plannedTours, name ,date).getTourLeader().getDot().remove(Tour.searchByAreaAndDate(plannedTours, name ,date).getStart());
+            Tour.searchByAreaAndDate(plannedTours, name ,date).getTourLeader().getDot().remove(Tour.searchByAreaAndDate(plannedTours, name ,date).getEnd());
             plannedTours.remove(Tour.searchByAreaAndDate(plannedTours, name, date));
             Tour.addPlannedTour(plannedTours, rawTours);
             System.out.println(plannedTours.get(rawTours.size()-1).plannedTourToString());
@@ -742,7 +743,6 @@ public class Main {
 
     private static void removeArea() {
         System.out.print("Enter areas name: ");
-        scanner.nextLine();
         String name = scanner.nextLine();
         if (Area.searchByName(areas, name) == null) {
             System.out.println("no area found");
@@ -757,7 +757,6 @@ public class Main {
 
     private static void editArea() {
         System.out.print("Enter areas name: ");
-        scanner.nextLine();
         String name = scanner.nextLine();
         if (Area.searchByName(areas, name) == null) {
             System.out.println("no area found");
@@ -948,7 +947,6 @@ public class Main {
 
     private static void searchTourLeaderByArea() {
         System.out.print("Enter the areas name: ");
-        scanner.nextLine();
         String area = scanner.nextLine();
         if (TourLeader.searchByArea(tourLeaders,area).size() == 0) {
             System.out.println("no one found");
@@ -963,9 +961,7 @@ public class Main {
     }
 
     private static void searchTourLeaderByLastName() {
-        clearScreen();
         System.out.print("Enter last name: ");
-        scanner.nextLine();
         String lastName = scanner.nextLine();
         if (TourLeader.searchByLastName(tourLeaders, lastName) == null) {
             System.out.println("no one found");
@@ -977,9 +973,7 @@ public class Main {
     }
 
     private static void searchTourLeaderByName() {
-        clearScreen();
         System.out.print("Enter first name: ");
-        scanner.nextLine();
         String firstName = scanner.nextLine();
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
@@ -995,7 +989,6 @@ public class Main {
     private static void editTourLeader() {
         clearScreen();
         System.out.print("Enter national code: ");
-        scanner.nextLine();
         String nationalCode = scanner.nextLine();
         TourLeader tourLeader = TourLeader.searchByNationalCode(tourLeaders, nationalCode);
         System.out.println(tourLeader.toString());

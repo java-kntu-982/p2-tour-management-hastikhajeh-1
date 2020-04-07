@@ -84,7 +84,6 @@ public class TourLeader {
         System.out.println("Enter the area's name: ");
         String name;
         boolean flag;
-        scanner.nextLine();
         for (int i = 0; i < n; i++) {
             flag = true;
             name = scanner.nextLine();
