@@ -19,13 +19,6 @@ public class Main {
 
         setToday();
 
-//        Good for showing one location
-//        MapUtil.showMap("Shiraz");
-//        MapUtil.showMap("esfehan");
-//        MapUtil.showMap("shiraz hafezie");
-//        MapUtil.showMap("@29.6257966,52.5563165,17z");
-//        Good for showing two locations
-//        MapUtil.showMap("Tehran","Dubai");
     }
 
     private static void setToday() {
