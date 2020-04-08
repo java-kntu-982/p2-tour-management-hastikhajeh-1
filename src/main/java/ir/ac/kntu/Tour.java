@@ -1,7 +1,6 @@
 package ir.ac.kntu;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Scanner;
 
 public class Tour {
