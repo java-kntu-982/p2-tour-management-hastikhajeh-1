@@ -9,10 +9,10 @@ public class TourLeaderManager {
         System.out.println("Enter age: ");
         int age1 = getInt("from: ");
         int age2 = getInt("to: ");
-        if (TourLeader.searchBetween2Ages(tourLeaders, age1, age2, today).size() == 0) {
+        if (TourLeaderMethods.searchBetween2Ages(tourLeaders, age1, age2, today).size() == 0) {
             System.out.println("no one found");
         } else {
-            for (TourLeader tourLeader : TourLeader.searchBetween2Ages(tourLeaders, age1, age2, today)) {
+            for (TourLeader tourLeader : TourLeaderMethods.searchBetween2Ages(tourLeaders, age1, age2, today)) {
                 System.out.println(tourLeader.toString());
                 System.out.println("-------------");
             }
@@ -23,10 +23,10 @@ public class TourLeaderManager {
 
     public static void searchYoungerThan() {
         int age = getInt("Enter the age: ");
-        if (TourLeader.searchYoungerThan(tourLeaders, age, today).size() == 0) {
+        if (TourLeaderMethods.searchYoungerThan(tourLeaders, age, today).size() == 0) {
             System.out.println("no one found");
         } else {
-            for (TourLeader tourLeader : TourLeader.searchYoungerThan(tourLeaders, age, today)) {
+            for (TourLeader tourLeader : TourLeaderMethods.searchYoungerThan(tourLeaders, age, today)) {
                 System.out.println(tourLeader.toString());
                 System.out.println("-------------");
             }
@@ -37,10 +37,10 @@ public class TourLeaderManager {
 
     public static void searchOlderThan() {
         int age = getInt("Enter the age: ");
-        if (TourLeader.searchOlderThan(tourLeaders, age, today).size() == 0) {
+        if (TourLeaderMethods.searchOlderThan(tourLeaders, age, today).size() == 0) {
             System.out.println("no one found");
         } else {
-            for (TourLeader tourLeader : TourLeader.searchOlderThan(tourLeaders, age, today)) {
+            for (TourLeader tourLeader : TourLeaderMethods.searchOlderThan(tourLeaders, age, today)) {
                 System.out.println(tourLeader.toString());
                 System.out.println("-------------");
             }
@@ -52,10 +52,10 @@ public class TourLeaderManager {
     public static void searchByGivenAge() {
         clearScreen();
         int age = getInt("Enter the age: ");
-        if (TourLeader.searchByAge(tourLeaders, age, today).size() == 0) {
+        if (TourLeaderMethods.searchByAge(tourLeaders, age, today).size() == 0) {
             System.out.println("no one found");
         } else {
-            for (TourLeader tourLeader : TourLeader.searchByAge(tourLeaders, age, today)) {
+            for (TourLeader tourLeader : TourLeaderMethods.searchByAge(tourLeaders, age, today)) {
                 System.out.println(tourLeader.toString());
                 System.out.println("-------------");
             }
@@ -67,10 +67,10 @@ public class TourLeaderManager {
     public static void searchTourLeaderByArea() {
         System.out.print("Enter the areas name: ");
         String area = scanner.nextLine();
-        if (TourLeader.searchByArea(tourLeaders,area).size() == 0) {
+        if (TourLeaderMethods.searchByArea(tourLeaders,area).size() == 0) {
             System.out.println("no one found");
         } else {
-            for (TourLeader tourLeader : TourLeader.searchByArea(tourLeaders, area)) {
+            for (TourLeader tourLeader : TourLeaderMethods.searchByArea(tourLeaders, area)) {
                 System.out.println(tourLeader.toString());
                 System.out.println("-------------");
             }
@@ -82,10 +82,10 @@ public class TourLeaderManager {
     public static void searchTourLeaderByLastName() {
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
-        if (TourLeader.searchByLastName(tourLeaders, lastName) == null) {
+        if (TourLeaderMethods.searchByLastName(tourLeaders, lastName) == null) {
             System.out.println("no one found");
         } else {
-            System.out.println(TourLeader.searchByLastName(tourLeaders, lastName).toString());
+            System.out.println(TourLeaderMethods.searchByLastName(tourLeaders, lastName).toString());
         }
         pause();
         printTourLeaderMenu();
@@ -96,10 +96,10 @@ public class TourLeaderManager {
         String firstName = scanner.nextLine();
         System.out.print("Enter last name: ");
         String lastName = scanner.nextLine();
-        if (TourLeader.searchByName(tourLeaders, firstName, lastName) == null) {
+        if (TourLeaderMethods.searchByName(tourLeaders, firstName, lastName) == null) {
             System.out.println("no one found");
         } else {
-            System.out.println(TourLeader.searchByName(tourLeaders, firstName, lastName).toString());
+            System.out.println(TourLeaderMethods.searchByName(tourLeaders, firstName, lastName).toString());
         }
         pause();
         printTourLeaderMenu();
@@ -109,7 +109,7 @@ public class TourLeaderManager {
         clearScreen();
         System.out.print("Enter national code: ");
         String nationalCode = scanner.nextLine();
-        TourLeader tourLeader = TourLeader.searchByNationalCode(tourLeaders, nationalCode);
+        TourLeader tourLeader = TourLeaderMethods.searchByNationalCode(tourLeaders, nationalCode);
         System.out.println(tourLeader.toString());
         tourLeaders.remove(tourLeader);
         TourLeader.addTourLeader(tourLeaders);
