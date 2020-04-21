@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Tour {
-    private boolean raw;
     private int duration;
     private int price;
     private int maxParticipant;
@@ -15,71 +14,11 @@ public class Tour {
     private boolean foreign;
     private boolean byAirplane;
     private ArrayList<String> placesToVisit = new ArrayList<>(duration);
-    private Date start;
-    private Date end;
-    private TourLeader tourLeader;
 
     static Scanner scanner = new Scanner(System.in);
 
-    public static void addPlannedTour(ArrayList<Tour> plannedTours, ArrayList<Tour> rawTours) {
-        Tour plannedTour = new Tour();
-        plannedTour.setRaw(false);
-        System.out.println(Tour.rawToursToString(rawTours));
-        System.out.print("Choose an area: ");
-        String name = scanner.nextLine();
-        for (Tour tour : rawTours) {
-            if (tour.getArea().getName().equalsIgnoreCase(name)) {
-                copyRawTourInPlannedTour(plannedTour,tour);
-                break;
-            }
-        }
-        System.out.println("Tour starts from: ");
-        plannedTour.setStart(Date.setDate());
-        plannedTour.setEnd(plannedTour.getStart().nextDay(plannedTour.getDuration()));
-        boolean flag = true;
-        while (flag) {
-            System.out.println(TourLeader.tourLeaderNamesToString());
-            System.out.print("Enter tour leader's full name or enter \"cancel\" and add tour leader: ");
-            name = scanner.nextLine();
-            if (name.equalsIgnoreCase("cancel")) {
-                TourLeader.addTourLeader(Main.tourLeaders);
-                continue;
-            } else {
-                plannedTour.setTourLeader(new TourLeader());
-                for (TourLeader tourLeader : Main.tourLeaders) {
-                    if (tourLeader.getFullName().equalsIgnoreCase(name) && tourLeader.getAreas().contains(plannedTour.getArea())) {
-                        if (tourLeader.isAvailable(plannedTour.start, plannedTour.end)) {
-                            flag = false;
-                            plannedTour.setTourLeader(tourLeader);
-                        } else {
-                            System.out.println("this leader is not available");
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        plannedTour.getTourLeader().getDot().add(plannedTour.getEnd());
-        plannedTour.getTourLeader().getDot().add(plannedTour.getStart());
-        plannedTours.add(plannedTour);
-    }
-
-    public static void copyRawTourInPlannedTour(Tour planned, Tour raw) {
-        planned.setPlacesToVisit(raw.getPlacesToVisit());
-        planned.setDestination(raw.getDestination());
-        planned.setOrigin(raw.getOrigin());
-        planned.setByAirplane(raw.isByAirplane());
-        planned.setPrice(raw.getPrice());
-        planned.setMaxParticipant(raw.getMaxParticipant());
-        planned.setMinParticipant(raw.getMinParticipant());
-        planned.setForeign(raw.isForeign());
-        planned.setDuration(raw.getDuration());
-        planned.setArea(raw.getArea());
-    }
-
     public static void addRawTour(ArrayList<Tour> rawTours) {
         Tour tour = new Tour();
-        tour.setRaw(true);
         tour.setArea(getAreaFromTerminal());
         tour.setDuration(getDurationFromTerminal());
         tour.setForeign(tour.getArea().isForeign());
@@ -163,24 +102,6 @@ public class Tour {
         return Main.areas.get(Main.areas.size()-1);
     }
 
-    public static Tour searchByArea(ArrayList<Tour> tours, String name) {
-        for (Tour tour : tours) {
-            if (tour.getArea().getName().equalsIgnoreCase(name)) {
-                return tour;
-            }
-        }
-        return null;
-    }
-
-    public static Tour searchByAreaAndDate(ArrayList<Tour> plannedTours, String name, Date date) {
-        for (Tour tour : plannedTours) {
-            if(tour.getArea().getName().equalsIgnoreCase(name) && tour.getStart().equals(date)) {
-                return tour;
-            }
-        }
-        return null;
-    }
-
     public static String rawToursToString(ArrayList<Tour> rawTours) {
         String string = "";
         for (Tour tour : rawTours) {
@@ -189,96 +110,15 @@ public class Tour {
         return string;
     }
 
-    public static ArrayList<Tour> searchTourByDuration(ArrayList<Tour> tours, int duration) {
-        ArrayList<Tour> tours1 = new ArrayList<>();
-        for (Tour tour : tours) {
-            if (tour.getDuration() == duration) {
-                tours1.add(tour);
-            }
-        }
-        return tours1;
+    @Override
+    protected Tour clone() throws CloneNotSupportedException {
+        Tour tour = (Tour) super.clone();
+        tour.area = area.clone();
+        return tour;
     }
 
-    public static Tour searchByPlace(ArrayList<Tour> tours, String place) {
-        for (Tour tour : tours) {
-            for (String name : tour.getPlacesToVisit()) {
-                if (name.equalsIgnoreCase(place)) {
-                    return tour;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static ArrayList<Tour> searchByMinAndMaxParticipants(ArrayList<Tour> tours, int min, int max) {
-        ArrayList<Tour> tours1 = new ArrayList<>();
-        for (Tour tour : tours) {
-            if (tour.getMinParticipant() == min && tour.getMaxParticipant() == max) {
-                tours1.add(tour);
-            }
-        }
-        return tours1;
-    }
-
-    public static ArrayList<Tour> searchByPrice(ArrayList<Tour> tours, int price) {
-        ArrayList<Tour> tours1 = new ArrayList<>();
-        for (Tour tour : tours) {
-            if (tour.getPrice() == price) {
-                tours1.add(tour);
-            }
-        }
-        return tours1;
-    }
-
-    public static ArrayList<Tour> searchMoreExpensivePrice(ArrayList<Tour> tours, int price) {
-        ArrayList<Tour> tours1 = new ArrayList<>();
-        for (Tour tour : tours) {
-            if (tour.getPrice() > price) {
-                tours1.add(tour);
-            }
-        }
-        return tours1;
-    }
-
-    public static ArrayList<Tour> searchCheaperPrice(ArrayList<Tour> tours, int price) {
-        ArrayList<Tour> tours1 = new ArrayList<>();
-        for (Tour tour : tours) {
-            if (tour.getPrice() < price) {
-                tours1.add(tour);
-            }
-        }
-        return tours1;
-    }
-
-    public static ArrayList<Tour> searchBetween2Price(ArrayList<Tour> tours, int min, int max) {
-        ArrayList<Tour> tours1 = new ArrayList<>();
-        for (Tour tour : tours) {
-            if (tour.getPrice() > min && tour.getPrice() < max) {
-                tours1.add(tour);
-            }
-        }
-        return tours1;
-    }
-
-    public String plannedTourToString() {
-        return "Planned tour: " + "\n" +
-                "duration: " + duration + "\n" +
-                "price: " + price + "\n" +
-                "maxParticipant: " + maxParticipant + "\n" +
-                "minParticipant: " + minParticipant + "\n" +
-                "area: " + area.getName() + "\n" +
-                "origin: " + origin + '\n' +
-                "destination: " + destination + '\n' +
-                (foreign?"Foreign":"Domestic") + " tour" + "\n" +
-                (byAirplane?"By airplane":"By bus") + "\n" +
-                "PlacesToVisit: " + placesToVisitToString() + "\n" +
-                "start: " + start.toString() + "\n" +
-                "end: " + end.toString() + "\n" +
-                "tourLeader: " + tourLeader.getFirstName() + " " + tourLeader.getLastName();
-    }
-
-    public String rawTourToString() {
-        return "Raw tour" + "\n" +
+    public String ToString() {
+        return "Tour" + "\n" +
                 "duration: " + duration + "\n" +
                 "price: " + price + "\n" +
                 "maxParticipant: " + maxParticipant + "\n" +
@@ -377,38 +217,6 @@ public class Tour {
 
     public void setPlacesToVisit(ArrayList<String> placesToVisit) {
         this.placesToVisit = placesToVisit;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public TourLeader getTourLeader() {
-        return tourLeader;
-    }
-
-    public void setTourLeader(TourLeader tourLeader) {
-        this.tourLeader = tourLeader;
-    }
-
-    public boolean isRaw() {
-        return raw;
-    }
-
-    public void setRaw(boolean raw) {
-        this.raw = raw;
     }
 
 }
