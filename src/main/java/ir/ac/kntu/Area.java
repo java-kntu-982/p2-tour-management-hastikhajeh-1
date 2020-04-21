@@ -57,6 +57,11 @@ public class Area {
     }
 
     @Override
+    protected Area clone() throws CloneNotSupportedException {
+        return (Area) super.clone();
+    }
+
+    @Override
     public String toString() {
         return (foreign ? "Foreign":"Domestic") + " Area" + "\n" +
                 "name: " + name + '\n' +
