@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TourLeader {
-    private String firstName;
-    private String lastName;
-    private String nationalCode;
-    private Date dob;
-    private Date doe;
-    private boolean single;
-    private ArrayList<Area> areas;
-    private ArrayList<Date> dot;
+    protected String firstName;
+    protected String lastName;
+    protected String nationalCode;
+    protected Date dob;
+    protected Date doe;
+    protected boolean single;
+    protected ArrayList<Area> areas;
+    protected ArrayList<Date> dot;
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -106,86 +106,86 @@ public class TourLeader {
         return areas;
     }
 
-    public static TourLeader searchByName(ArrayList<TourLeader> tourLeaders, String firstName, String lastName) {
-        for (int i = 0; i < tourLeaders.size(); i++) {
-            if (tourLeaders.get(i).firstName.equals(firstName) && tourLeaders.get(i).lastName.equals(lastName)) {
-                return tourLeaders.get(i);
-            }
-        }
-        return null;
-    }
-
-    public static TourLeader searchByLastName(ArrayList<TourLeader> tourLeaders, String lastName) {
-        for (int i = 0; i < tourLeaders.size(); i++) {
-            if (tourLeaders.get(i).lastName.equals(lastName)) {
-                return tourLeaders.get(i);
-            }
-        }
-        return null;
-    }
-
-    public static TourLeader searchByNationalCode(ArrayList<TourLeader> tourLeaders, String nationalCode) {
-        for (int i = 0; i < tourLeaders.size(); i++) {
-            if (tourLeaders.get(i).nationalCode.equals(nationalCode)) {
-                return tourLeaders.get(i);
-            }
-        }
-        return null;
-    }
-
-    public static ArrayList<TourLeader> searchByArea(ArrayList<TourLeader> tourLeaders, String name) {
-        ArrayList<TourLeader> wanted = new ArrayList<>();
-        for (TourLeader tourLeader : tourLeaders) {
-            for (Area area : tourLeader.getAreas()) {
-                if (area.getName().equalsIgnoreCase(name)) {
-                    wanted.add(tourLeader);
-                    break;
-                }
-            }
-        }
-        return wanted;
-    }
-
-    public static ArrayList<TourLeader> searchByAge(ArrayList<TourLeader> tourLeaders, int age, Date today) {
-        ArrayList<TourLeader> wanted = new ArrayList<>();
-        for (TourLeader tourLeader : tourLeaders) {
-            if (tourLeader.getDOB().ageCalculator(today) == age) {
-                wanted.add(tourLeader);
-            }
-        }
-        return wanted;
-    }
-
-    public static ArrayList<TourLeader> searchOlderThan(ArrayList<TourLeader> tourLeaders, int age, Date today) {
-        ArrayList<TourLeader> wanted = new ArrayList<>();
-        for (TourLeader tourLeader : tourLeaders) {
-            if (tourLeader.getDOB().ageCalculator(today) > age) {
-                wanted.add(tourLeader);
-            }
-        }
-        return wanted;
-    }
-
-    public static ArrayList<TourLeader> searchYoungerThan(ArrayList<TourLeader> tourLeaders, int age, Date today) {
-        ArrayList<TourLeader> wanted = new ArrayList<>();
-        for (TourLeader tourLeader : tourLeaders) {
-            if (tourLeader.getDOB().ageCalculator(today) < age) {
-                wanted.add(tourLeader);
-            }
-        }
-        return wanted;
-    }
-
-    public static ArrayList<TourLeader> searchBetween2Ages(ArrayList<TourLeader> tourLeaders, int age1, int age2, Date today) {
-        ArrayList<TourLeader> wanted = new ArrayList<>();
-        for (TourLeader tourLeader : tourLeaders) {
-            if (tourLeader.getDOB().ageCalculator(today) > age1 && tourLeader.getDOB().ageCalculator(today) < age2) {
-                wanted.add(tourLeader);
-            }
-        }
-        return wanted;
-    }
-
+//    public static TourLeader searchByName(ArrayList<TourLeader> tourLeaders, String firstName, String lastName) {
+//        for (int i = 0; i < tourLeaders.size(); i++) {
+//            if (tourLeaders.get(i).firstName.equals(firstName) && tourLeaders.get(i).lastName.equals(lastName)) {
+//                return tourLeaders.get(i);
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public static TourLeader searchByLastName(ArrayList<TourLeader> tourLeaders, String lastName) {
+//        for (int i = 0; i < tourLeaders.size(); i++) {
+//            if (tourLeaders.get(i).lastName.equals(lastName)) {
+//                return tourLeaders.get(i);
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public static TourLeader searchByNationalCode(ArrayList<TourLeader> tourLeaders, String nationalCode) {
+//        for (int i = 0; i < tourLeaders.size(); i++) {
+//            if (tourLeaders.get(i).nationalCode.equals(nationalCode)) {
+//                return tourLeaders.get(i);
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public static ArrayList<TourLeader> searchByArea(ArrayList<TourLeader> tourLeaders, String name) {
+//        ArrayList<TourLeader> wanted = new ArrayList<>();
+//        for (TourLeader tourLeader : tourLeaders) {
+//            for (Area area : tourLeader.getAreas()) {
+//                if (area.getName().equalsIgnoreCase(name)) {
+//                    wanted.add(tourLeader);
+//                    break;
+//                }
+//            }
+//        }
+//        return wanted;
+//    }
+//
+//    public static ArrayList<TourLeader> searchByAge(ArrayList<TourLeader> tourLeaders, int age, Date today) {
+//        ArrayList<TourLeader> wanted = new ArrayList<>();
+//        for (TourLeader tourLeader : tourLeaders) {
+//            if (tourLeader.getDOB().ageCalculator(today) == age) {
+//                wanted.add(tourLeader);
+//            }
+//        }
+//        return wanted;
+//    }
+//
+//    public static ArrayList<TourLeader> searchOlderThan(ArrayList<TourLeader> tourLeaders, int age, Date today) {
+//        ArrayList<TourLeader> wanted = new ArrayList<>();
+//        for (TourLeader tourLeader : tourLeaders) {
+//            if (tourLeader.getDOB().ageCalculator(today) > age) {
+//                wanted.add(tourLeader);
+//            }
+//        }
+//        return wanted;
+//    }
+//
+//    public static ArrayList<TourLeader> searchYoungerThan(ArrayList<TourLeader> tourLeaders, int age, Date today) {
+//        ArrayList<TourLeader> wanted = new ArrayList<>();
+//        for (TourLeader tourLeader : tourLeaders) {
+//            if (tourLeader.getDOB().ageCalculator(today) < age) {
+//                wanted.add(tourLeader);
+//            }
+//        }
+//        return wanted;
+//    }
+//
+//    public static ArrayList<TourLeader> searchBetween2Ages(ArrayList<TourLeader> tourLeaders, int age1, int age2, Date today) {
+//        ArrayList<TourLeader> wanted = new ArrayList<>();
+//        for (TourLeader tourLeader : tourLeaders) {
+//            if (tourLeader.getDOB().ageCalculator(today) > age1 && tourLeader.getDOB().ageCalculator(today) < age2) {
+//                wanted.add(tourLeader);
+//            }
+//        }
+//        return wanted;
+//    }
+//
     public boolean isAvailable( Date date1, Date date2) {
         for (int i = 0; i < dot.size(); i+=2) {
             if (date2.compareTo(dot.get(i)) >= 0 && date1.compareTo(dot.get(i+1)) <= 0) {
