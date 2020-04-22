@@ -122,23 +122,42 @@ public class TourManager {
     }
 
     public static void editRawTour() {
-        System.out.print("Enter tour's name: ");
-        String name = scanner.nextLine();
-        if (TourMethods.searchByArea(rawTours, name) == null) {
-            System.out.println("no tour found");
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")) {
+            System.out.println("you dont have permission");
         } else {
-            System.out.println(TourMethods.searchByArea(rawTours, name).toString());
-            rawTours.remove(TourMethods.searchByArea(rawTours, name));
-            Tour.addRawTour(rawTours);
-            System.out.println(rawTours.get(rawTours.size()-1).toString());
+            System.out.print("Enter tour's name: ");
+            String name = scanner.nextLine();
+            if (TourMethods.searchByArea(rawTours, name) == null) {
+                System.out.println("no tour found");
+            } else {
+                System.out.println(TourMethods.searchByArea(rawTours, name).toString());
+                Tour tour = TourMethods.searchByArea(rawTours, name);
+                Tour.addRawTour(rawTours);
+                tour.setArea(rawTours.get(rawTours.size() - 1).getArea());
+                tour.setDuration(rawTours.get(rawTours.size() - 1).getDuration());
+                tour.setForeign(rawTours.get(rawTours.size() - 1).isForeign());
+                tour.setMinParticipant(rawTours.get(rawTours.size() - 1).getMinParticipant());
+                tour.setMaxParticipant(rawTours.get(rawTours.size() - 1).getMaxParticipant());
+                tour.setPrice(rawTours.get(rawTours.size() - 1).getPrice());
+                tour.setByAirplane(rawTours.get(rawTours.size() - 1).isByAirplane());
+                tour.setOrigin(rawTours.get(rawTours.size() - 1).getOrigin());
+                tour.setDestination(rawTours.get(rawTours.size() - 1).getDestination());
+                tour.setPlacesToVisit(rawTours.get(rawTours.size() - 1).getPlacesToVisit());
+                rawTours.remove(rawTours.get(rawTours.size() - 1));
+                System.out.println(tour.toString());
+            }
         }
         pause();
         printTourMenu();
     }
 
     public static void addRawTour() {
-        Tour.addRawTour(rawTours);
-        System.out.println(rawTours.get(rawTours.size()-1).toString());
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")) {
+            System.out.println("you dont have permission");
+        } else {
+            Tour.addRawTour(rawTours);
+            System.out.println(rawTours.get(rawTours.size() - 1).toString());
+        }
         pause();
         printTourMenu();
     }

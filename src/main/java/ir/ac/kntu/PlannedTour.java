@@ -79,8 +79,8 @@ public class PlannedTour extends Tour {
         return null;
     }
 
-    public String ToString() {
-        return super.ToString() + "\n" +
+    public String toString() {
+        return super.toString() + "\n" +
                 "start: " + start.toString() + "\n" +
                 "end: " + end.toString() + "\n" +
                 "tourLeader: " + tourLeader.getFirstName() + " " + tourLeader.getLastName();

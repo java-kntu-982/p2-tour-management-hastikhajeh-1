@@ -3,7 +3,9 @@ package ir.ac.kntu;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class TourLeader {
+import static ir.ac.kntu.Main.people;
+
+public class TourLeader extends Person {
     protected String firstName;
     protected String lastName;
     protected String nationalCode;
@@ -12,8 +14,19 @@ public class TourLeader {
     protected boolean single;
     protected ArrayList<Area> areas;
     protected ArrayList<Date> dot;
+    private String accesslvl;
 
-    static Scanner scanner = new Scanner(System.in);
+
+    static Scanner scanner = new Scanner(System.in)    ;
+
+    public TourLeader(String username, String password, String email, String phoneNumber) {
+        super(username, password, email, phoneNumber);
+        accesslvl = "c";
+    }
+
+    public TourLeader() {
+
+    }
 
     public static void addTourLeader(ArrayList<TourLeader> tourLeaders) {
         TourLeader tourLeader = new TourLeader();
@@ -106,87 +119,19 @@ public class TourLeader {
         return areas;
     }
 
-//    public static TourLeader searchByName(ArrayList<TourLeader> tourLeaders, String firstName, String lastName) {
-//        for (int i = 0; i < tourLeaders.size(); i++) {
-//            if (tourLeaders.get(i).firstName.equals(firstName) && tourLeaders.get(i).lastName.equals(lastName)) {
-//                return tourLeaders.get(i);
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public static TourLeader searchByLastName(ArrayList<TourLeader> tourLeaders, String lastName) {
-//        for (int i = 0; i < tourLeaders.size(); i++) {
-//            if (tourLeaders.get(i).lastName.equals(lastName)) {
-//                return tourLeaders.get(i);
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public static TourLeader searchByNationalCode(ArrayList<TourLeader> tourLeaders, String nationalCode) {
-//        for (int i = 0; i < tourLeaders.size(); i++) {
-//            if (tourLeaders.get(i).nationalCode.equals(nationalCode)) {
-//                return tourLeaders.get(i);
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public static ArrayList<TourLeader> searchByArea(ArrayList<TourLeader> tourLeaders, String name) {
-//        ArrayList<TourLeader> wanted = new ArrayList<>();
-//        for (TourLeader tourLeader : tourLeaders) {
-//            for (Area area : tourLeader.getAreas()) {
-//                if (area.getName().equalsIgnoreCase(name)) {
-//                    wanted.add(tourLeader);
-//                    break;
-//                }
-//            }
-//        }
-//        return wanted;
-//    }
-//
-//    public static ArrayList<TourLeader> searchByAge(ArrayList<TourLeader> tourLeaders, int age, Date today) {
-//        ArrayList<TourLeader> wanted = new ArrayList<>();
-//        for (TourLeader tourLeader : tourLeaders) {
-//            if (tourLeader.getDOB().ageCalculator(today) == age) {
-//                wanted.add(tourLeader);
-//            }
-//        }
-//        return wanted;
-//    }
-//
-//    public static ArrayList<TourLeader> searchOlderThan(ArrayList<TourLeader> tourLeaders, int age, Date today) {
-//        ArrayList<TourLeader> wanted = new ArrayList<>();
-//        for (TourLeader tourLeader : tourLeaders) {
-//            if (tourLeader.getDOB().ageCalculator(today) > age) {
-//                wanted.add(tourLeader);
-//            }
-//        }
-//        return wanted;
-//    }
-//
-//    public static ArrayList<TourLeader> searchYoungerThan(ArrayList<TourLeader> tourLeaders, int age, Date today) {
-//        ArrayList<TourLeader> wanted = new ArrayList<>();
-//        for (TourLeader tourLeader : tourLeaders) {
-//            if (tourLeader.getDOB().ageCalculator(today) < age) {
-//                wanted.add(tourLeader);
-//            }
-//        }
-//        return wanted;
-//    }
-//
-//    public static ArrayList<TourLeader> searchBetween2Ages(ArrayList<TourLeader> tourLeaders, int age1, int age2, Date today) {
-//        ArrayList<TourLeader> wanted = new ArrayList<>();
-//        for (TourLeader tourLeader : tourLeaders) {
-//            if (tourLeader.getDOB().ageCalculator(today) > age1 && tourLeader.getDOB().ageCalculator(today) < age2) {
-//                wanted.add(tourLeader);
-//            }
-//        }
-//        return wanted;
-//    }
-//
-    public boolean isAvailable( Date date1, Date date2) {
+    public static void addTourLeaderAccess() {
+        System.out.print("enter user name: ");
+        String username = scanner.nextLine();
+        System.out.print("enter password: ");
+        String password = scanner.nextLine();
+        System.out.print("enter email: ");
+        String email = scanner.nextLine();
+        System.out.print("enter phone number: ");
+        String phoneNumber = scanner.nextLine();
+        people.add(new TourLeader(username,password,email,phoneNumber));
+    }
+
+    public boolean isAvailable(Date date1, Date date2) {
         for (int i = 0; i < dot.size(); i+=2) {
             if (date2.compareTo(dot.get(i)) >= 0 && date1.compareTo(dot.get(i+1)) <= 0) {
                 return false;
@@ -284,5 +229,9 @@ public class TourLeader {
 
     public void setDot(ArrayList<Date> dot) {
         this.dot = dot;
+    }
+
+    public String getAccesslvl() {
+        return accesslvl;
     }
 }

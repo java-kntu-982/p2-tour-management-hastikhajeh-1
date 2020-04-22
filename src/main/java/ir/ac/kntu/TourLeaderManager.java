@@ -106,21 +106,36 @@ public class TourLeaderManager {
     }
 
     public static void editTourLeader() {
-        clearScreen();
-        System.out.print("Enter national code: ");
-        String nationalCode = scanner.nextLine();
-        TourLeader tourLeader = TourLeaderMethods.searchByNationalCode(tourLeaders, nationalCode);
-        System.out.println(tourLeader.toString());
-        tourLeaders.remove(tourLeader);
-        TourLeader.addTourLeader(tourLeaders);
-        System.out.println(tourLeaders.get(tourLeaders.size()-1).toString());
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")||access.getAccesslvl().equals("b")) {
+            System.out.println("you dont have permission");
+        } else {
+            System.out.print("Enter national code: ");
+            String nationalCode = scanner.nextLine();
+            TourLeader tourLeader = TourLeaderMethods.searchByNationalCode(tourLeaders, nationalCode);
+            System.out.println(tourLeader.toString());
+            TourLeader.addTourLeader(tourLeaders);
+            tourLeader.setFirstName(tourLeaders.get(tourLeaders.size() - 1).firstName);
+            tourLeader.setLastName(tourLeaders.get(tourLeaders.size() - 1).lastName);
+            tourLeader.setDot(tourLeaders.get(tourLeaders.size() - 1).dot);
+            tourLeader.setSingle(tourLeaders.get(tourLeaders.size() - 1).single);
+            tourLeader.setDOE(tourLeaders.get(tourLeaders.size() - 1).doe);
+            tourLeader.setDOB(tourLeaders.get(tourLeaders.size() - 1).dob);
+            tourLeader.setNationalCode(tourLeaders.get(tourLeaders.size() - 1).nationalCode);
+            tourLeader.setAreas(tourLeaders.get(tourLeaders.size() - 1).areas);
+            tourLeaders.remove(tourLeaders.get(tourLeaders.size() - 1));
+            System.out.println(tourLeader.toString());
+        }
         pause();
         printTourLeaderMenu();
     }
 
     public static void addTourLeader() {
-        TourLeader.addTourLeader(tourLeaders);
-        System.out.println(tourLeaders.get(tourLeaders.size() - 1).toString());
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")||access.getAccesslvl().equals("b")) {
+            System.out.println("you dont have permission");
+        } else {
+            TourLeader.addTourLeader(tourLeaders);
+            System.out.println(tourLeaders.get(tourLeaders.size() - 1).toString());
+        }
         pause();
         printTourLeaderMenu();
     }

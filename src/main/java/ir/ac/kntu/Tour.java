@@ -117,7 +117,7 @@ public class Tour {
         return tour;
     }
 
-    public String ToString() {
+    public String toString() {
         return "Tour" + "\n" +
                 "duration: " + duration + "\n" +
                 "price: " + price + "\n" +

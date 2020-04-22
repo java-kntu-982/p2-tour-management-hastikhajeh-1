@@ -7,6 +7,7 @@ import java.util.Scanner;
 import static ir.ac.kntu.AreaManager.*;
 import static ir.ac.kntu.MapManager.*;
 import static ir.ac.kntu.Menu.*;
+import static ir.ac.kntu.PersonManager.*;
 import static ir.ac.kntu.PlannedTourManager.*;
 import static ir.ac.kntu.TourLeaderManager.*;
 import static ir.ac.kntu.TourManager.*;
@@ -18,12 +19,62 @@ public class Main {
     static ArrayList<Tour> rawTours = new ArrayList<>();
     static ArrayList<PlannedTour> plannedTours = new ArrayList<>();
     static ArrayList<Area> areas = new ArrayList<>();
+    static ArrayList<Person> people = new ArrayList<>();
     static Date today;
+    static Person admin = new Admin("admin", "admin", "admin@person.com", "09111111111");
+    static Person employee = new Employee("employee", "employee", "employee@person.com", "09222222222");
+    static Person tourLeader = new TourLeader("tourLeader", "tourLeader", "tourLeader@person.com", "09333333333");
+    static Person client = new Client("client", "client", "client@person.com", "09444444444");
+    static Person access;
+
 
     public static void main(String[] args) {
 
-        setToday();
+        people.add(admin);
+        people.add(employee);
+        people.add(tourLeader);
+        people.add(client);
+        login();
 
+    }
+
+    private static void login() {
+        System.out.print("enter your username: ");
+        String username = scanner.nextLine();
+        System.out.print("enter your password: ");
+        String password = scanner.nextLine();
+        boolean validUser = false;
+        for (Person person : people) {
+            if (person.getUsername().equals(username)) {
+                validUser = true;
+                if (person.getPassword().equals(password)) {
+                    access = person;
+                    switch (person.getAccesslvl()) {
+                        case "a":
+                            System.out.println("you entered as admin.");
+                            break;
+                        case "b":
+                            System.out.println("you entered as employee.");
+                            break;
+                        case "c":
+                            System.out.println("you entered as tour leader.");
+                            break;
+                        case "d":
+                            System.out.println("you entered as client.");
+                            break;
+                    }
+                    pause();
+                    setToday();
+                } else {
+                    System.out.println("wrong password");
+                }
+                break;
+            }
+        }
+        if (!validUser) {
+            System.out.println("no user found");
+        }
+        login();
     }
 
     private static void setToday() {
@@ -75,10 +126,95 @@ public class Main {
                 printMapMenu();
                 break;
             case 5:
+                printPersonMenu();
+                break;
+            case 6:
                 setToday();
+                break;
+            case 7:
+                login();
                 break;
             default:
                 menu();
+        }
+    }
+
+    public static void personMenu() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                printPersonMenu2(1);
+                break;
+            case 2:
+                printPersonMenu2(2);
+                break;
+            case 3:
+                printPersonMenu2(3);
+                break;
+            case 4:
+                printMenu();
+                break;
+
+        }
+    }
+
+    public static void addPersonMenu() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                addEmployee();
+                break;
+            case 2:
+                addTourLeaderAccess();
+                break;
+            case 3:
+                addClient();
+                break;
+            case 4:
+                printPersonMenu();
+                break;
+            default:
+                addPersonMenu();
+        }
+    }
+
+    public static void removePersonMenu() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                removeEmployee();
+                break;
+            case 2:
+                removeTourLeaderAccess();
+                break;
+            case 3:
+                removeClient();
+                break;
+            case 4:
+                printPersonMenu();
+                break;
+            default:
+                removePersonMenu();
+        }
+    }
+
+    public static void editPersonMenu() {
+        int choice = getInt("Enter your choice: ");
+        switch (choice) {
+            case 1:
+                editEmployee();
+                break;
+            case 2:
+                editTourLeaderAccess();
+                break;
+            case 3:
+                editClient();
+                break;
+            case 4:
+                printPersonMenu();
+                break;
+            default:
+                editPersonMenu();
         }
     }
 

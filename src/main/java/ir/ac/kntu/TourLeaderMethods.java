@@ -2,7 +2,18 @@ package ir.ac.kntu;
 
 import java.util.ArrayList;
 
+import static ir.ac.kntu.Main.people;
+
 public class TourLeaderMethods {
+    public static TourLeader searchByUserAndPass(String username, String password) {
+        for (Person tourLeader : people) {
+            if (tourLeader.getClass().getSimpleName().equals("TourLeader") && tourLeader.getUsername().equals(username) && tourLeader.getPassword().equals(password)) {
+                return (TourLeader) tourLeader;
+            }
+        }
+        return null;
+    }
+
     public static TourLeader searchByName(ArrayList<TourLeader> tourLeaders, String firstName, String lastName) {
         for (int i = 0; i < tourLeaders.size(); i++) {
             if (tourLeaders.get(i).firstName.equals(firstName) && tourLeaders.get(i).lastName.equals(lastName)) {

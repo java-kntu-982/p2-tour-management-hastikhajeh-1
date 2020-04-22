@@ -9,37 +9,53 @@ public class AreaManager {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void removeArea() {
-        System.out.print("Enter areas name: ");
-        String name = scanner.nextLine();
-        if (Area.searchByName(areas, name) == null) {
-            System.out.println("no area found");
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")) {
+            System.out.println("you dont have permission");
         } else {
-            System.out.println(Area.searchByName(areas, name).toString());
-            areas.remove(Area.searchByName(areas, name));
-            System.out.println("area is removed");
+            System.out.print("Enter areas name: ");
+            String name = scanner.nextLine();
+            if (Area.searchByName(areas, name) == null) {
+                System.out.println("no area found");
+            } else {
+                System.out.println(Area.searchByName(areas, name).toString());
+                areas.remove(Area.searchByName(areas, name));
+                System.out.println("area is removed");
+            }
         }
         pause();
         printAreaMenu();
     }
 
     public static void editArea() {
-        System.out.print("Enter areas name: ");
-        String name = scanner.nextLine();
-        if (Area.searchByName(areas, name) == null) {
-            System.out.println("no area found");
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")) {
+            System.out.println("you dont have permission");
         } else {
-            System.out.println(Area.searchByName(areas, name).toString());
-            areas.remove(Area.searchByName(areas, name));
-            Area.addArea(areas);
-            System.out.println(areas.get(areas.size()-1).toString());
+            System.out.print("Enter areas name: ");
+            String name = scanner.nextLine();
+            if (Area.searchByName(areas, name) == null) {
+                System.out.println("no area found");
+            } else {
+                System.out.println(Area.searchByName(areas, name).toString());
+                Area area = Area.searchByName(areas, name);
+                Area.addArea(areas);
+                area.setForeign(areas.get(areas.size() - 1).isForeign());
+                area.setName(areas.get(areas.size() - 1).getName());
+                area.setPlaces(areas.get(areas.size() - 1).getPlaces());
+                areas.remove(areas.get(areas.size() - 1));
+                System.out.println(area.toString());
+            }
         }
         pause();
         printAreaMenu();
     }
 
     public static void addArea() {
-        Area.addArea(areas);
-        System.out.println(areas.get(areas.size()-1).toString());
+        if (access.getAccesslvl().equals("d")||access.getAccesslvl().equals("c")) {
+            System.out.println("you dont have permission");
+        } else {
+            Area.addArea(areas);
+            System.out.println(areas.get(areas.size() - 1).toString());
+        }
         pause();
         printAreaMenu();
     }
