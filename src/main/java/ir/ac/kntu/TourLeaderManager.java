@@ -111,19 +111,23 @@ public class TourLeaderManager {
         } else {
             System.out.print("Enter national code: ");
             String nationalCode = scanner.nextLine();
-            TourLeader tourLeader = TourLeaderMethods.searchByNationalCode(tourLeaders, nationalCode);
-            System.out.println(tourLeader.toString());
-            TourLeader.addTourLeader(tourLeaders);
-            tourLeader.setFirstName(tourLeaders.get(tourLeaders.size() - 1).firstName);
-            tourLeader.setLastName(tourLeaders.get(tourLeaders.size() - 1).lastName);
-            tourLeader.setDot(tourLeaders.get(tourLeaders.size() - 1).dot);
-            tourLeader.setSingle(tourLeaders.get(tourLeaders.size() - 1).single);
-            tourLeader.setDOE(tourLeaders.get(tourLeaders.size() - 1).doe);
-            tourLeader.setDOB(tourLeaders.get(tourLeaders.size() - 1).dob);
-            tourLeader.setNationalCode(tourLeaders.get(tourLeaders.size() - 1).nationalCode);
-            tourLeader.setAreas(tourLeaders.get(tourLeaders.size() - 1).areas);
-            tourLeaders.remove(tourLeaders.get(tourLeaders.size() - 1));
-            System.out.println(tourLeader.toString());
+            if (TourLeaderMethods.searchByNationalCode(tourLeaders, nationalCode) == null) {
+                System.out.println("no one found");
+            } else {
+                TourLeader tourLeader = TourLeaderMethods.searchByNationalCode(tourLeaders, nationalCode);
+                System.out.println(tourLeader.toString());
+                TourLeader.addTourLeader(tourLeaders);
+                tourLeader.setFirstName(tourLeaders.get(tourLeaders.size() - 1).firstName);
+                tourLeader.setLastName(tourLeaders.get(tourLeaders.size() - 1).lastName);
+                tourLeader.setDot(tourLeaders.get(tourLeaders.size() - 1).dot);
+                tourLeader.setSingle(tourLeaders.get(tourLeaders.size() - 1).single);
+                tourLeader.setDOE(tourLeaders.get(tourLeaders.size() - 1).doe);
+                tourLeader.setDOB(tourLeaders.get(tourLeaders.size() - 1).dob);
+                tourLeader.setNationalCode(tourLeaders.get(tourLeaders.size() - 1).nationalCode);
+                tourLeader.setAreas(tourLeaders.get(tourLeaders.size() - 1).areas);
+                tourLeaders.remove(tourLeaders.get(tourLeaders.size() - 1));
+                System.out.println(tourLeader.toString());
+            }
         }
         pause();
         printTourLeaderMenu();

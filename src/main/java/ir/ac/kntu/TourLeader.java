@@ -70,7 +70,7 @@ public class TourLeader extends Person {
         while (true) {
             System.out.print("Enter national code: ");
             nationalCode = scanner.nextLine();
-            if (Validator.checkName(nationalCode)) {
+            if (Validator.checkNationalCode(nationalCode)) {
                 break;
             }
         }
@@ -101,7 +101,7 @@ public class TourLeader extends Person {
             flag = true;
             name = scanner.nextLine();
             for (Area area : Main.areas) {
-                if (area.getName().equals(name)) {
+                if (area.getName().equalsIgnoreCase(name)) {
                     areas.add(area);
                     flag = false;
                 }
