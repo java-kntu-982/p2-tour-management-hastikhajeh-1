@@ -37,8 +37,9 @@ public class Main {
         login();
 
     }
-
+    static boolean firstEnter = true;
     private static void login() {
+        clearScreen();
         System.out.print("enter your username: ");
         String username = scanner.nextLine();
         System.out.print("enter your password: ");
@@ -64,15 +65,22 @@ public class Main {
                             break;
                     }
                     pause();
-                    setToday();
+                    if (firstEnter) {
+                        firstEnter = false;
+                        setToday();
+                    } else {
+                        printMenu();
+                    }
                 } else {
                     System.out.println("wrong password");
+                    pause();
                 }
                 break;
             }
         }
         if (!validUser) {
             System.out.println("no user found");
+            pause();
         }
         login();
     }
